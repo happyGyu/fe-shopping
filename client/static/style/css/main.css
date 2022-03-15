@@ -226,4 +226,45 @@ header {
   height: 35px;
   margin-right: 15px;
 }
+
+.header-main .banner__main .icon-menu {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+}
+
+.header-main .banner__main .icon-menu li {
+  width: 50px;
+  margin-left: 30px;
+  font-size: 0.75rem;
+}
+
+.header-main .banner__main .icon-menu .my-coupang__icon {
+  background: url("https://img1a.coupangcdn.com/image/coupang/common/pc_header_img_sprite_180104.png") -112px -42px no-repeat;
+  margin: 0 auto 5px auto;
+  width: 30px;
+  height: 30px;
+}
+
+.header-main .banner__main .icon-menu .cart {
+  position: absolute;
+  left: 70px;
+  top: -10px;
+}
+
+.header-main .banner__main .icon-menu .cart__icon {
+  background: url("https://img1a.coupangcdn.com/image/coupang/common/pc_header_img_sprite_180104.png") -112px 0px no-repeat;
+  margin: 0 auto 5px auto;
+  width: 40px;
+  height: 40px;
+}
+
+.header-main .banner__main .icon-menu .cart__count {
+  color: #FFF;
+  font-weight: 600;
+  position: absolute;
+  right: 14px;
+  top: 3px;
+}
 /*# sourceMappingURL=main.css.map */

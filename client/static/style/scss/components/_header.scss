@@ -111,6 +111,46 @@ header {
                     margin-right: 15px;
                 }
             }
+
+            .icon-menu {
+                display: flex;
+                position: relative;
+
+                li {
+                    width: 50px;
+                    margin-left: 30px;
+                    font-size: 0.75rem;
+                }
+
+                .my-coupang__icon {
+                    background: url($iconURL) $personIconPos no-repeat;
+                    margin: 0 auto 5px auto;
+                    width: 30px;
+                    height: 30px;
+                }
+
+                .cart {
+                    position: absolute;
+                    left: 70px;
+                    top: -10px;
+
+                    &__icon {
+                        background: url($iconURL) $cartIconPos no-repeat;
+                        margin: 0 auto 5px auto;
+                        width: 40px;
+                        height: 40px;
+                    }
+
+                    &__count {
+                        color: $white;
+                        font-weight: $bold;
+                        position: absolute;
+                        right: 14px;
+                        top: 3px;
+                    }
+                }
+            }
+
         }
     }
 }

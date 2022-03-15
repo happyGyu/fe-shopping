@@ -78,6 +78,10 @@ a:hover {
   text-decoration: none;
 }
 
+i {
+  display: block;
+}
+
 .standard-contents {
   width: 1020px;
   margin: 0 auto;
@@ -141,12 +145,6 @@ header {
   top: 75px;
   width: 100%;
   text-align: center;
-}
-
-.header-main .banner {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
 }
 
 .header-main .banner__main {
@@ -266,5 +264,53 @@ header {
   position: absolute;
   right: 14px;
   top: 3px;
+}
+
+.header-main .banner__gnb-items {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-top: 10px;
+  font-size: 0.75rem;
+}
+
+.header-main .banner__gnb-item {
+  margin: 0px 10px 5px 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.header-main .banner .front-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 2px;
+}
+
+.header-main .banner .blue-rocket-icon {
+  background: url("https://user-images.githubusercontent.com/95538993/158399320-2ef2a304-c1f9-4e92-8951-b9d72cc817d8.JPG");
+  background-size: 20px;
+}
+
+.header-main .banner .green-rocket-icon {
+  background: url("https://static.coupangcdn.com/image/coupang/common/pc_header_rocket_fresh_1x.png");
+}
+
+.header-main .banner .biz-icon {
+  background: url("https://static.coupangcdn.com/image/coupang/common/logoBizonlyBrown.png") no-repeat;
+}
+
+.header-main .banner .purple-rocket-icon {
+  background: url("https://static.coupangcdn.com/image/coupang/home/icons/Overseas.png");
+}
+
+.header-main .banner .new-icon {
+  background: url("https://static.coupangcdn.com/image/coupang/common/ico_new.png") no-repeat;
+  background-size: 12px;
+  width: 12px;
+  height: 12px;
 }
 /*# sourceMappingURL=main.css.map */

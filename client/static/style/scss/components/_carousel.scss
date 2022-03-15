@@ -1,0 +1,28 @@
+.carousel {
+    position: relative;
+
+    &__mainImg img {
+        width: 1920px;
+        height: 450px;
+        position: absolute;
+        left: 50%;
+        margin-left: -960px;
+    }
+    
+    &__thumbnails {
+        position: absolute;
+        right: -10px;
+        top: 45px;
+        box-shadow: -4px 4px 4px $blackShadow;
+    }
+
+    &__thumbnail {
+        line-height: 0;
+        box-sizing: border-box;
+
+        &--selected {
+            border: 2px solid $blue;
+        }
+    }
+
+}

@@ -64,10 +64,6 @@ button {
   cursor: pointer;
 }
 
-img {
-  max-width: 100%;
-}
-
 a {
   text-decoration: none;
   color: inherit;
@@ -88,6 +84,10 @@ i {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+}
+
+.hidden {
+  display: none;
 }
 
 header {
@@ -312,5 +312,35 @@ header {
   background-size: 12px;
   width: 12px;
   height: 12px;
+}
+
+.carousel {
+  position: relative;
+}
+
+.carousel__mainImg img {
+  width: 1920px;
+  height: 450px;
+  position: absolute;
+  left: 50%;
+  margin-left: -960px;
+}
+
+.carousel__thumbnails {
+  position: absolute;
+  right: -10px;
+  top: 45px;
+  -webkit-box-shadow: -4px 4px 4px rgba(0, 0, 0, 0.3);
+          box-shadow: -4px 4px 4px rgba(0, 0, 0, 0.3);
+}
+
+.carousel__thumbnail {
+  line-height: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.carousel__thumbnail--selected {
+  border: 2px solid #4285f4;
 }
 /*# sourceMappingURL=main.css.map */

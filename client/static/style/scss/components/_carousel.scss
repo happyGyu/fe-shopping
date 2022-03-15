@@ -1,13 +1,23 @@
 .carousel {
     position: relative;
 
-    &__mainImg img {
-        width: 1920px;
-        height: 450px;
-        position: absolute;
-        left: 50%;
-        margin-left: -960px;
-    }
+    &__poster {
+        display: none;
+
+        img {
+            width: 1920px;
+            height: 450px;
+            position: absolute;
+            left: 50%;
+            margin-left: -960px;
+        }
+
+        &--selected {
+            display: block;
+        }
+
+    } 
+    
     
     &__thumbnails {
         position: absolute;
@@ -24,5 +34,4 @@
             border: 2px solid $blue;
         }
     }
-
 }

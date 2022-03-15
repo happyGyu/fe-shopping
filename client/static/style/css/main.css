@@ -318,12 +318,20 @@ header {
   position: relative;
 }
 
-.carousel__mainImg img {
+.carousel__poster {
+  display: none;
+}
+
+.carousel__poster img {
   width: 1920px;
   height: 450px;
   position: absolute;
   left: 50%;
   margin-left: -960px;
+}
+
+.carousel__poster--selected {
+  display: block;
 }
 
 .carousel__thumbnails {

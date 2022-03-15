@@ -1,17 +1,13 @@
-import { initialCarouselIdx } from "../constant.js";
+import { initialCarouselIdx, autoSlideInterval } from "../constant.js";
 
 export function getCarouselTemplate(carouselData) {
   return `
-        <div class="carousel standard-contents">
-            <ul class="carousel__main-contents">
-                ${carouselData
-                  .map((data) => getCarouselContentTemplate("mainImg", data))
-                  .join("")}
+        <div class="carousel standard-contents" data-length=${carouselData.length}>
+            <ul class="carousel__posters">
+                ${carouselData.map((data) => getCarouselContentTemplate("poster", data)).join("")}
             </ul>
             <ul class="carousel__thumbnails">
-                ${carouselData
-                  .map((data) => getCarouselContentTemplate("thumbnail", data))
-                  .join("")}
+                ${carouselData.map((data) => getCarouselContentTemplate("thumbnail", data)).join("")}
             </ul>
         </div>
     `;
@@ -19,9 +15,9 @@ export function getCarouselTemplate(carouselData) {
 
 function getCarouselContentTemplate(type, contentData) {
   return `
-    <li class="carousel__${type} 
-        ${type === "mainImg" ? "hidden" : ""}" 
-        data-index=${contentData.index}>
+    <li class="carousel__${type}"  
+        data-index=${contentData.index}
+        data-type=${type}>
         <a href="#">
             <img 
                 src=${contentData[`${type}Src`]} 
@@ -34,24 +30,34 @@ function getCarouselContentTemplate(type, contentData) {
 
 export function activateCarousel() {
   const carousel = document.querySelector(".carousel");
-  setDefault(carousel);
+  togglePageSelection("poster", carousel);
+  togglePageSelection("thumbnail", carousel);
+  startAutoSlide(carousel);
 }
 
-function setDefault(carousel) {
-  setDefaultMainContent(carousel);
-  setDefaultThumbnail(carousel);
+function togglePageSelection(type, carousel, index = initialCarouselIdx) {
+  const initialMainContent = carousel.querySelector(`.carousel__${type}s :nth-child(${index + 1})`);
+  initialMainContent.classList.toggle(`carousel__${type}--selected`);
 }
 
-function setDefaultMainContent(carousel) {
-  const initialMainContent = carousel.querySelector(
-    `.carousel__main-contents :nth-child(${initialCarouselIdx + 1})`
+function startAutoSlide(carousel) {
+  const slideIntervalId = setInterval(() => {
+    goToNextContent(carousel);
+  }, autoSlideInterval);
+  return slideIntervalId;
+}
+
+//todo: 함수 중복 정리
+function goToNextContent(carousel) {
+  const carouselLength = Number(carousel.dataset.length);
+  const currContentIdx = Number(carousel.querySelector(".carousel__thumbnail--selected").dataset.index);
+  const nextContentIdx = (currContentIdx + 1 + carouselLength) % carouselLength;
+  const currSelectedContents = carousel.querySelectorAll(`[data-index='${currContentIdx}']`);
+  const nextSelectedContents = carousel.querySelectorAll(`[data-index='${nextContentIdx}']`);
+  Array.from(currSelectedContents).forEach((content) =>
+    togglePageSelection(content.dataset.type, carousel, currContentIdx)
   );
-  initialMainContent.classList.toggle("hidden");
-}
-
-function setDefaultThumbnail(carousel) {
-  const initialThumbnail = carousel.querySelector(
-    `.carousel__thumbnails :nth-child(${initialCarouselIdx + 1})`
+  Array.from(nextSelectedContents).forEach((content) =>
+    togglePageSelection(content.dataset.type, carousel, nextContentIdx)
   );
-  initialThumbnail.classList.toggle("carousel__thumbnail--selected");
 }

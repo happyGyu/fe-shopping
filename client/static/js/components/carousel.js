@@ -33,6 +33,9 @@ export function activateCarousel() {
   togglePageSelection("poster", carousel);
   togglePageSelection("thumbnail", carousel);
   startAutoSlide(carousel);
+  carousel
+    .querySelector(".carousel__thumbnails")
+    .addEventListener("mouseover", (e) => handleThumbnailMouseOverEvent(e));
 }
 
 function togglePageSelection(type, carousel, index = initialCarouselIdx) {
@@ -48,10 +51,10 @@ function startAutoSlide(carousel) {
 }
 
 //todo: 함수 중복 정리
-function goToNextContent(carousel) {
+function goToNextContent(carousel, nextIdx = null) {
   const carouselLength = Number(carousel.dataset.length);
   const currContentIdx = Number(carousel.querySelector(".carousel__thumbnail--selected").dataset.index);
-  const nextContentIdx = (currContentIdx + 1 + carouselLength) % carouselLength;
+  const nextContentIdx = nextIdx ?? (currContentIdx + 1 + carouselLength) % carouselLength;
   const currSelectedContents = carousel.querySelectorAll(`[data-index='${currContentIdx}']`);
   const nextSelectedContents = carousel.querySelectorAll(`[data-index='${nextContentIdx}']`);
   Array.from(currSelectedContents).forEach((content) =>
@@ -60,4 +63,10 @@ function goToNextContent(carousel) {
   Array.from(nextSelectedContents).forEach((content) =>
     togglePageSelection(content.dataset.type, carousel, nextContentIdx)
   );
+}
+
+function handleThumbnailMouseOverEvent(event) {
+  const carousel = document.querySelector(".carousel");
+  const target = event.target.closest("li");
+  goToNextContent(carousel, Number(target.dataset.index));
 }

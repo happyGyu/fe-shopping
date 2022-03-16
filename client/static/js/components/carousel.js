@@ -1,72 +1,85 @@
 import { initialCarouselIdx, autoSlideInterval } from "../constant.js";
 
-export function getCarouselTemplate(carouselData) {
-  return `
-        <div class="carousel standard-contents" data-length=${carouselData.length}>
-            <ul class="carousel__posters">
-                ${carouselData.map((data) => getCarouselContentTemplate("poster", data)).join("")}
-            </ul>
-            <ul class="carousel__thumbnails">
-                ${carouselData.map((data) => getCarouselContentTemplate("thumbnail", data)).join("")}
-            </ul>
-        </div>
-    `;
-}
+export class Carousel {
+  #carouselDOM;
+  #carouselData;
+  #slideIntervalID;
 
-function getCarouselContentTemplate(type, contentData) {
-  return `
-    <li class="carousel__${type}"  
+  constructor(carouselData) {
+    this.#carouselData = carouselData;
+  }
+
+  get template() {
+    return this.#composeTemplate();
+  }
+
+  #composeTemplate() {
+    return `
+      <div class="carousel standard-contents" data-length=${this.#carouselData.length}>
+        <ul class="carousel__posters">
+          ${this.#carouselData.map((data) => this.#makeContentTemplate("poster", data)).join("")}
+        </ul>
+        <ul class="carousel__thumbnails">
+          ${this.#carouselData.map((data) => this.#makeContentTemplate("thumbnail", data)).join("")}
+        </ul>
+      </div>
+    `;
+  }
+
+  #makeContentTemplate(type, contentData) {
+    return `
+      <li class="carousel__${type}"  
         data-index=${contentData.index}
         data-type=${type}>
         <a href="#">
-            <img 
-                src=${contentData[`${type}Src`]} 
-                alt=${contentData.description} ${type}
-            /> 
+          <img 
+            src=${contentData[`${type}Src`]} 
+            alt=${contentData.description} ${type}
+          /> 
         </a>
-    </li>
+      </li>
     `;
+  }
+
+  activate() {
+    this.#carouselDOM = document.querySelector(".carousel");
+    this.#toggleContentSelection(initialCarouselIdx);
+    this.#startAutoSlide();
+    this.#addThumbnailEvent();
+  }
+
+  #toggleContentSelection(contentIdx) {
+    const targetContentList = this.#carouselDOM.querySelectorAll(`[data-index='${contentIdx}']`);
+    Array.from(targetContentList).forEach((content) =>
+      content.classList.toggle(`carousel__${content.dataset.type}--selected`)
+    );
+  }
+
+  #startAutoSlide() {
+    this.#slideIntervalID = setInterval(() => {
+      this.#goToNextContent();
+    }, autoSlideInterval);
+  }
+
+  #goToNextContent(nextIdx = null) {
+    const carouselLength = this.#carouselData.length;
+    const currContentIdx = Number(
+      this.#carouselDOM.querySelector(".carousel__thumbnail--selected").dataset.index
+    );
+    const nextContentIdx = nextIdx ?? (currContentIdx + 1 + carouselLength) % carouselLength;
+    this.#toggleContentSelection(currContentIdx);
+    this.#toggleContentSelection(nextContentIdx);
+  }
+
+  #addThumbnailEvent() {
+    const thumbnailsDOM = this.#carouselDOM.querySelector(".carousel__thumbnails");
+    thumbnailsDOM.addEventListener("mouseover", (e) => this.#handleThumbnailMouseOverEvent(e));
+  }
+
+  #handleThumbnailMouseOverEvent(event) {
+    const target = event.target.closest("li");
+    this.#goToNextContent(Number(target.dataset.index));
+  }
 }
 
-export function activateCarousel() {
-  const carousel = document.querySelector(".carousel");
-  togglePageSelection("poster", carousel);
-  togglePageSelection("thumbnail", carousel);
-  startAutoSlide(carousel);
-  carousel
-    .querySelector(".carousel__thumbnails")
-    .addEventListener("mouseover", (e) => handleThumbnailMouseOverEvent(e));
-}
 
-function togglePageSelection(type, carousel, index = initialCarouselIdx) {
-  const initialMainContent = carousel.querySelector(`.carousel__${type}s :nth-child(${index + 1})`);
-  initialMainContent.classList.toggle(`carousel__${type}--selected`);
-}
-
-function startAutoSlide(carousel) {
-  const slideIntervalId = setInterval(() => {
-    goToNextContent(carousel);
-  }, autoSlideInterval);
-  return slideIntervalId;
-}
-
-//todo: 함수 중복 정리
-function goToNextContent(carousel, nextIdx = null) {
-  const carouselLength = Number(carousel.dataset.length);
-  const currContentIdx = Number(carousel.querySelector(".carousel__thumbnail--selected").dataset.index);
-  const nextContentIdx = nextIdx ?? (currContentIdx + 1 + carouselLength) % carouselLength;
-  const currSelectedContents = carousel.querySelectorAll(`[data-index='${currContentIdx}']`);
-  const nextSelectedContents = carousel.querySelectorAll(`[data-index='${nextContentIdx}']`);
-  Array.from(currSelectedContents).forEach((content) =>
-    togglePageSelection(content.dataset.type, carousel, currContentIdx)
-  );
-  Array.from(nextSelectedContents).forEach((content) =>
-    togglePageSelection(content.dataset.type, carousel, nextContentIdx)
-  );
-}
-
-function handleThumbnailMouseOverEvent(event) {
-  const carousel = document.querySelector(".carousel");
-  const target = event.target.closest("li");
-  goToNextContent(carousel, Number(target.dataset.index));
-}

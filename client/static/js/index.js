@@ -1,15 +1,11 @@
 import { getData } from "./util/util.js";
-import {
-  getCarouselTemplate,
-  activateCarousel,
-} from "./components/carousel.js";
+import { Carousel } from "./components/carousel.js";
 
 function main() {
   getData("carousel").then((result) => {
-    document
-      .querySelector("body")
-      .insertAdjacentHTML("beforeend", getCarouselTemplate(result));
-    activateCarousel();
+    const carousel = new Carousel(result);
+    document.querySelector("body").insertAdjacentHTML("beforeend", carousel.template);
+    carousel.activate();
   });
 }
 

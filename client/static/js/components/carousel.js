@@ -56,9 +56,15 @@ export class Carousel {
   }
 
   #startAutoSlide() {
+    if (this.#slideIntervalID) return;
     this.#slideIntervalID = setInterval(() => {
       this.#goToNextContent();
     }, autoSlideInterval);
+  }
+
+  #stopAutoSlide() {
+    clearInterval(this.#slideIntervalID);
+    this.#slideIntervalID = null;
   }
 
   #goToNextContent(nextIdx = null) {
@@ -74,11 +80,17 @@ export class Carousel {
   #addThumbnailEvent() {
     const thumbnailsDOM = this.#carouselDOM.querySelector(".carousel__thumbnails");
     thumbnailsDOM.addEventListener("mouseover", (e) => this.#handleThumbnailMouseOverEvent(e));
+    thumbnailsDOM.addEventListener("mouseleave",(e) => this.#handleThumbnailMouseLeaveEvent(e));
   }
 
   #handleThumbnailMouseOverEvent(event) {
+    this.#stopAutoSlide();
     const target = event.target.closest("li");
     this.#goToNextContent(Number(target.dataset.index));
+  }
+
+  #handleThumbnailMouseLeaveEvent(event) {
+    this.#startAutoSlide();
   }
 }
 

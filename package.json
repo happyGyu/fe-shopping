@@ -4,8 +4,8 @@
   "description": "coupang clone coding",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "init": "nodemon --experimental-json-modules ./server/app.js"
+    "test": "nodemon --experimental-json-modules ./server/app.js",
+    "start": "node --experimental-json-modules ./server/app.js"
   },
   "repository": {
     "type": "git",

@@ -1,9 +1,8 @@
 .dropdown-list {
-    position: absolute;
     background-color: $white;
     z-index: 1000;
 
-    &__item {
+    li {
         height:30px;
         padding-left: 10px;
 

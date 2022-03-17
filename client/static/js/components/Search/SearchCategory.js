@@ -10,7 +10,7 @@ export class SearchCategory extends DropdownList {
 
   constructor(categoryData) {
     super();
-    this.cssClassName = "search__category";
+    this.dropdownClassName = "search__category";
     this.#categoryData = categoryData;
     this.#selectedSearchCategory = initialSearchCategory;
   }

@@ -37,7 +37,26 @@
                             <img src="https://image7.coupangcdn.com/image/coupang/common/logo_coupang_w350.png"/>
                         </a>
                     </h1>
-                    <form class="search"></form>
+                    <form class="search">
+                        <div class="search__main">
+                            <div class="search__input">
+                                <input class="search__input-textbox" type="text" placeholder="찾고 싶은 상품을 검색해보세요!"/>
+                                <a class="search__input-voice-btn"></a>
+                                <button class="search__input-send-btn" type="submit"><span class="search-icon"></span></button>
+                            </div>
+                            <div class="search__recent">
+                                <div class="search__recent-title">최근 검색어</div>
+                                <ul class="dropdown-list search__recent-list">
+                                    <li class="dropdown-list__item search__recent-item"><a>아이템1</a></li>
+                                    <li class="dropdown-list__item search__recent-item"><a>아이템2</a></li>
+                                </ul>
+                                <div class="search__recent-util">
+                                    <button class="search__recent-util--delete-all" type="button">전체삭제</button>
+                                    <button class="search__recent-util--off" type="button">최근검색어끄기</button>
+                                </div>
+                            </div>   
+                        </div>
+                    </form>
                     <ul class="icon-menu">
                         <li class="my-coupang">
                             <a class="my-coupang__icon"></a>

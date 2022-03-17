@@ -5,14 +5,14 @@ export class DropdownList {
 
   getDropdownListTemplate(listData) {
     return `
-        <ul class="dropdown-list ${this.cssClassName}-list">
+        <ul class="dropdown-list ${this.dropdownClassName}-list">
             ${listData.map((data) => this.getItemTemplate(data)).join("")}
         </ul>
     `;
   }
 
   getItemTemplate(itemData) {
-    return `<li class="dropdown-list__item ${this.cssClassName}-list__item"><a>${itemData}</a></li>`;
+    return `<li class="dropdown-list__item ${this.dropdownClassName}-item"><a>${itemData}</a></li>`;
   }
 
   handleListClickEvent(event) {

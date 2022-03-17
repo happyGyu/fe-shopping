@@ -1,8 +1,9 @@
 import { getData } from "./util/util.js";
 import { Carousel } from "./components/Carousel.js";
 
-function main() {
-  getData("carousel").then(renderCarousel);
+async function main() {
+  const carouselData = await getData("carousel");
+  renderCarousel(carouselData);
 }
 
 function renderCarousel(carouselData) {

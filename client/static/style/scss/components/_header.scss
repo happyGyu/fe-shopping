@@ -51,64 +51,6 @@ header {
                 height: 40px;
                 margin-right: 30px;
             }
-        
-            .search {
-                border: 2px solid $blue ;
-                display: flex;
-                align-items: center;
-                height: 40px;
-
-                &__select {
-                    width: 140px;
-                    display: flex;
-                    align-items: center;
-                    font-size: 0.75rem;
-                    border-right: 1px solid $gray;
-
-                    &--current {
-                        width: 140px;
-                        margin-left: 10px;
-                    }
-                    
-                    &-btn {
-                        width: 30px;
-                        height: 30px;
-                        margin-right: 5px;
-
-                        &--closed {
-                            background: url($iconURL) $closedIconPos no-repeat;    
-                        }
-
-                        &--opend {
-                            background: url($iconURL) $opendIconPos no-repeat;
-                        }
-                    }
-            
-                    &--options {
-                        display: none;
-                    }
-                }
-
-                &__input {
-                    width: 300px;
-                    border: none;
-                    padding-left: 10px;
-                }
-
-                &__voice-btn {
-                    background: url($micIconURL) no-repeat;
-                    background-size: 20px 50px;
-                    width: 20px;
-                    height: 25px;
-                }
-
-                &__send-btn {
-                    background: url($iconURL) $glassIconPos no-repeat;
-                    width: 35px;
-                    height: 35px;
-                    margin-right: 15px;
-                }
-            }
 
             .icon-menu {
                 display: flex;

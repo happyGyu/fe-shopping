@@ -25,8 +25,8 @@ export class SearchCategory extends DropdownList{
         return `
             <div class="search__category--current">
                 <span class="search__category--current-text">${this.selectedSearchCategory}</span>
-                <button class="search__category-current-btn"></button>
+                <button class="search__category--current-btn"></button>
             </div>
-        `
+        `;
     }
 }

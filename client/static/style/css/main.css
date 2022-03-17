@@ -293,38 +293,46 @@ header {
   height: 40px;
 }
 
-.search__select {
+.search__category {
+  position: relative;
   width: 140px;
+  height: 100%;
+  font-size: 0.75rem;
+  border-right: 1px solid #ddd;
+}
+
+.search__category--current {
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.search__category--current-text {
+  margin-left: 10px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  font-size: 0.75rem;
-  border-right: 1px solid #ddd;
 }
 
-.search__select--current {
-  width: 140px;
-  margin-left: 10px;
-}
-
-.search__select-btn {
+.search__category--current-btn {
   width: 30px;
   height: 30px;
-  margin-right: 5px;
-}
-
-.search__select-btn--closed {
   background: url("https://img1a.coupangcdn.com/image/coupang/common/pc_header_img_sprite_180104.png") 6px -165px no-repeat;
 }
 
-.search__select-btn--opend {
+.search__category--current-btn--opend {
   background: url("https://img1a.coupangcdn.com/image/coupang/common/pc_header_img_sprite_180104.png") 6px -142px no-repeat;
 }
 
-.search__select--options {
+.search__category--options {
   display: none;
 }
 
@@ -370,5 +378,29 @@ header {
   z-index: 1000;
   -webkit-box-shadow: -4px 4px 4px rgba(0, 0, 0, 0.3);
           box-shadow: -4px 4px 4px rgba(0, 0, 0, 0.3);
+}
+
+.dropdown-list {
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  background-color: #FFF;
+  z-index: 1000;
+}
+
+.dropdown-list__item {
+  width: 100%;
+  height: 40px;
+}
+
+.dropdown-list__item span {
+  height: 100%;
+  margin-left: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 /*# sourceMappingURL=main.css.map */

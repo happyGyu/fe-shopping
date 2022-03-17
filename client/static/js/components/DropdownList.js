@@ -12,7 +12,7 @@ export class DropdownList {
   }
 
   getItemTemplate(itemData) {
-    return `<li class=dropdown-list__item>${itemData}</li>`;
+    return `<li class=dropdown-list__item><span>${itemData}</span></li>`;
   }
 
   toggleFocus(focusSubject, target) {

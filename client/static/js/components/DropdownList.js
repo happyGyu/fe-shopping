@@ -5,8 +5,8 @@ export class DropdownList {
 
   getDropdownListTemplate(listData) {
     return `
-        <ul class="dropdown-list">
-            ${listData.map((data) => this.getItemTemplate(data).join(""))}
+        <ul class="dropdown-list ">
+            ${listData.map((data) => this.getItemTemplate(data)).join("")}
         </ul>
     `;
   }

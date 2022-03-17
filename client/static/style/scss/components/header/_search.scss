@@ -3,13 +3,32 @@
     display: flex;
     align-items: center;
     height: 40px;
+    font-size: 0.75rem;
 
     &__category {
         position: relative;
         width: 140px;
         height: 100%;
-        font-size: 0.75rem;
         border-right: 1px solid $gray;
+
+        &-list {
+            top: 100%;
+            width: 100%;
+            max-height: 0px;
+            overflow: auto;
+            transition: 0.2s ease-in;
+
+            &__item:hover {
+                color: $blue;
+                cursor: pointer;
+                text-decoration: underline;
+            }
+
+            &--opened {
+                max-height: 520px;
+                border: 1px solid $gray;
+            }
+        }
 
         &--current {
             width: 100%;
@@ -35,18 +54,16 @@
                 }
             }
         }
-
-        &--options {
-            display: none;
-        }
     }
 
     &__main {
         position: relative;
+        height: 100%;
     }
 
     &__input{
         display: flex;
+        height: 100%;
         align-items: center;
 
         &-textbox {

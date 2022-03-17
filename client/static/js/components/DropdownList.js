@@ -5,28 +5,28 @@ export class DropdownList {
 
   getDropdownListTemplate(listData) {
     return `
-        <ul class="dropdown-list">
+        <ul class="dropdown-list ${this.cssClassName}-list">
             ${listData.map((data) => this.getItemTemplate(data)).join("")}
         </ul>
     `;
   }
 
   getItemTemplate(itemData) {
-    return `<li class="dropdown-list__item"><a>${itemData}</a></li>`;
+    return `<li class="dropdown-list__item ${this.cssClassName}-list__item"><a>${itemData}</a></li>`;
   }
 
-  handleClickEvent(event) {
-    const target = event.target.closest('a');
+  handleListClickEvent(event) {
+    const target = event.target.closest("a");
     return target.innerText;
   }
 
   handleKeyDownEvent(event) {
-    console.log('hi')
+    console.log("hi");
     if (!["ArrowDown", "ArrowUp", "Enter"].includes(event.key)) return;
     if (event.key === "Enter") {
-      return this.handleEnterKey() 
+      return this.handleEnterKey();
     } else if (["ArrowDown", "ArrowUp"].includes(event.key)) {
-      this.handleArrowKey(event,key)
+      this.handleArrowKey(event, key);
     }
   }
 
@@ -46,6 +46,6 @@ export class DropdownList {
   }
 
   toggleKeyboardFocus(target) {
-    target.classList.toggle('keyboard-focusing');
+    target.classList.toggle("keyboard-focusing");
   }
 }

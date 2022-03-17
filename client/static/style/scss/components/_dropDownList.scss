@@ -1,12 +1,7 @@
 .dropdown-list {
     position: absolute;
-    top: 100%;
-    width: 100%;
     background-color: $white;
     z-index: 1000;
-    max-height: 0px;
-    overflow: auto;
-    transition: 0.2s ease-in;
 
     &__item {
         height:30px;
@@ -17,16 +12,5 @@
             display: flex;
             align-items: center;
         }
-
-        :hover {
-            color: $blue;
-            cursor: pointer;
-            text-decoration: underline;
-        }
     }
-}
-
-.dropdown-list--opened {
-    max-height: 520px;
-    border: 1px solid $gray;
 }

@@ -78,6 +78,10 @@ i {
   display: block;
 }
 
+textarea:focus, input:focus {
+  outline: none;
+}
+
 .standard-contents {
   width: 1020px;
   margin: 0 auto;
@@ -291,14 +295,34 @@ header {
       -ms-flex-align: center;
           align-items: center;
   height: 40px;
+  font-size: 0.75rem;
 }
 
 .search__category {
   position: relative;
   width: 140px;
   height: 100%;
-  font-size: 0.75rem;
   border-right: 1px solid #ddd;
+}
+
+.search__category-list {
+  top: 100%;
+  width: 100%;
+  max-height: 0px;
+  overflow: auto;
+  -webkit-transition: 0.2s ease-in;
+  transition: 0.2s ease-in;
+}
+
+.search__category-list__item:hover {
+  color: #4285f4;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.search__category-list--opened {
+  max-height: 520px;
+  border: 1px solid #ddd;
 }
 
 .search__category--current {
@@ -336,18 +360,16 @@ header {
   background: url("https://img1a.coupangcdn.com/image/coupang/common/pc_header_img_sprite_180104.png") 6px -142px no-repeat;
 }
 
-.search__category--options {
-  display: none;
-}
-
 .search__main {
   position: relative;
+  height: 100%;
 }
 
 .search__input {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  height: 100%;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
@@ -390,10 +412,6 @@ header {
   width: 100%;
   background-color: #FFF;
   z-index: 1000;
-  max-height: 0px;
-  overflow: auto;
-  -webkit-transition: 0.2s ease-in;
-  transition: 0.2s ease-in;
 }
 
 .dropdown-list__item {
@@ -409,16 +427,5 @@ header {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-}
-
-.dropdown-list__item :hover {
-  color: #4285f4;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.dropdown-list--opened {
-  max-height: 520px;
-  border: 1px solid #ddd;
 }
 /*# sourceMappingURL=main.css.map */

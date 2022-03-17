@@ -1,54 +1,85 @@
 import { DropdownList } from "../DropdownList.js";
 import { initialSearchCategory } from "../../constant.js";
 
-export class SearchCategory extends DropdownList{
-    #searchCategoryDOM;
-    #categoryData;
-    #selectedSearchCategory;
+export class SearchCategory extends DropdownList {
+  #categoryDOM;
+  #currCategoryTextDOM;
+  #categoryListDOM;
+  #categoryData;
+  #selectedSearchCategory;
 
-    constructor(categoryData) {
-        super();
-        this.#categoryData = categoryData;
-        this.#selectedSearchCategory = initialSearchCategory; 
-    }
+  constructor(categoryData) {
+    super();
+    this.cssClassName = "search__category";
+    this.#categoryData = categoryData;
+    this.#selectedSearchCategory = initialSearchCategory;
+  }
 
-    get template() {
-        return this.#getSearchCategoryTemplate()
-    }
+  get template() {
+    return this.#getSearchCategoryTemplate();
+  }
 
-    #getSearchCategoryTemplate() {
-        return `
+  #getSearchCategoryTemplate() {
+    return `
             <div class="search__category">
                 ${this.#getCurrentTemplate()}
                 ${this.getDropdownListTemplate(this.#categoryData)}
             </div>
-        `
-    }
+        `;
+  }
 
-    #getCurrentTemplate() {
-        return `
+  #getCurrentTemplate() {
+    return `
             <div class="search__category--current">
-                <span class="search__category--current-text">${this.#selectedSearchCategory}</span>
+                <span class="search__category--current-text">${
+                  this.#selectedSearchCategory
+                }</span>
                 <span class="search__category--current-btn"></span>
             </div>
         `;
-    }
+  }
 
-    activate() {
-        this.#searchCategoryDOM = document.querySelector('.search__category');
-        this.#activateCurrentCategory();
-        this.#searchCategoryDOM.addEventListener('click', (event) => {
-            this.#searchCategoryDOM.querySelector('.search__category--current-text').innerText = this.handleClickEvent(event)
-        })
-    }
+  activate() {
+    this.#cacheDOM();
+    this.#addCategoryClickEvent();
+    this.#addCategoryListClickEvent();
+    this.#addKeyDownEvent();
+  }
 
-    #activateCurrentCategory() {
-        const currentCategory = document.querySelector('.search__category--current')
-        currentCategory.addEventListener('click', (e) => this.#toggleCategoryListOpen(e)); 
-    }
+  #cacheDOM() {
+    this.#categoryDOM = document.querySelector(".search__category");
+    this.#currCategoryTextDOM = this.#categoryDOM.querySelector(
+      ".search__category--current-text"
+    );
+    this.#categoryListDOM = this.#categoryDOM.querySelector(".dropdown-list");
+  }
 
-    #toggleCategoryListOpen() {
-        const categoryList = this.#searchCategoryDOM.querySelector('.dropdown-list');
-        categoryList.classList.toggle('dropdown-list--opened')
-    }
+  #addCategoryClickEvent() {
+    this.#categoryDOM.addEventListener("click", (e) =>
+      this.#toggleCategoryListOpen(e)
+    );
+  }
+
+  #addCategoryListClickEvent() {
+    this.#categoryListDOM.addEventListener("click", (e) =>
+      this.#changeSelectedCategory(e)
+    );
+  }
+
+  #addKeyDownEvent() {
+    document
+      .querySelector(".search__category--current")
+      .addEventListener("keydown", () => {
+        console.log("hi");
+      });
+  }
+
+  #changeSelectedCategory(event) {
+    this.#currCategoryTextDOM.innerText = this.handleListClickEvent(event);
+  }
+
+  #toggleCategoryListOpen() {
+    const categoryList = this.#categoryDOM.querySelector(".dropdown-list");
+    categoryList.classList.toggle("search__category-list--opened");
+  }
 }

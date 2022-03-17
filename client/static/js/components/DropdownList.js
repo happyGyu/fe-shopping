@@ -5,29 +5,33 @@ export class DropdownList {
 
   getDropdownListTemplate(listData) {
     return `
-        <ul class="dropdown-list ">
+        <ul class="dropdown-list">
             ${listData.map((data) => this.getItemTemplate(data)).join("")}
         </ul>
     `;
   }
 
   getItemTemplate(itemData) {
-    return `<li class=dropdown-list__item><span>${itemData}</span></li>`;
+    return `<li class="dropdown-list__item"><a>${itemData}</a></li>`;
   }
 
-  toggleFocus(focusSubject, target) {
-    target.classList.toggle(`${focusSubject}-focusing`);
-  }
-
-  handleMouseMoveEvent(event) {
-    const target = event.target.closest("li");
-    this.toggleFocus("mouse", target);
+  handleClickEvent(event) {
+    const target = event.target.closest('a');
+    return target.innerText;
   }
 
   handleKeyDownEvent(event) {
-    if (!["ArrowDown, ArrowUp"].includes(event.key)) return;
-    handleArrowKey(event.key);
-    return this.keyboardFocusedItem;
+    console.log('hi')
+    if (!["ArrowDown", "ArrowUp", "Enter"].includes(event.key)) return;
+    if (event.key === "Enter") {
+      return this.handleEnterKey() 
+    } else if (["ArrowDown", "ArrowUp"].includes(event.key)) {
+      this.handleArrowKey(event,key)
+    }
+  }
+
+  handleEnterKey() {
+    return this.keyboardFocusedItem.innerText;
   }
 
   handleArrowKey(arrowKey) {
@@ -36,8 +40,12 @@ export class DropdownList {
         ? this.keyboardFocusedItem.nextSibling
         : this.keyboardFocusedItem.prevSibling;
     if (!newFocusedItem) return;
-    this.toggleFocus("keyboard", this.keyboardFocusedItem);
-    this.toggleFocus("keyboard", newFocusedItem);
+    this.toggleKeyboardFocus(this.keyboardFocusedItem);
+    this.toggleKeyboardFocus(newFocusedItem);
     this.keyboardFocusedItem = newFocusedItem;
+  }
+
+  toggleKeyboardFocus(target) {
+    target.classList.toggle('keyboard-focusing');
   }
 }

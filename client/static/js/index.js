@@ -18,7 +18,7 @@ function renderCarousel(carouselData) {
 function renderSearchCategory(categoryData) {
   const searchCategory = new SearchCategory(categoryData);
   document.querySelector(".search").insertAdjacentHTML("afterbegin", searchCategory.template);
-  //searchCategory.activate();
+  searchCategory.activate();
 }
 
 main();

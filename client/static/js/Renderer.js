@@ -1,4 +1,4 @@
-import { Carousel } from "./components/Carousel.js";
+import { Carousel } from "./components/carousel.js";
 import { SearchCategory } from "./components/search/SearchCategory.js";
 import { SearchMain } from "./components/Search/SearchMain.js";
 

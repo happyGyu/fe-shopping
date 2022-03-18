@@ -1,25 +1,12 @@
-import { DropdownList } from "../DropdownList.js";
+import { RecentSearchList } from "./RecentSearchList.js";
 
-export class SearchMain extends DropdownList {
+export class SearchMain {
   #searchMainDOM;
-  #recentSearchData;
+  #searchInputDOM;
+  #recentSearch;
 
   constructor() {
-    super();
-    this.#recentSearchData = this.#getRecentSearchData();
-    this.dropdownClassName = "search__recent";
-  }
-
-  #getRecentSearchData() {
-    return JSON.parse(localStorage.getItem("recentSearch") || "[]");
-  }
-
-  #updateRecentSearchData(newData) {
-    this.#recentSearchData.push(newData);
-    localStorage.setItem(
-      "recentSearch",
-      JSON.stringify(this.#recentSearchData)
-    );
+    this.#recentSearch = new RecentSearchList();
   }
 
   get template() {
@@ -30,7 +17,7 @@ export class SearchMain extends DropdownList {
     return `
       <div class="search__main">
         ${this.#getInputboxTemplate()}
-        ${this.#getRecentboxTemplate()}  
+        ${this.#recentSearch.template}  
       </div>
     `;
   }
@@ -45,48 +32,17 @@ export class SearchMain extends DropdownList {
     `;
   }
 
-  #getRecentboxTemplate() {
-    return `
-      <div class="search__recent">
-        ${this.#getRecentBoxTitleTemplate()}
-        ${this.getDropdownListTemplate(this.#recentSearchData)}
-        ${this.#getRecentBoxUtilTemplate()}
-      </div> 
-    `;
-  }
-
-  #getRecentBoxTitleTemplate() {
-    return `<div class="search__recent-title">최근 검색어</div>`;
-  }
-
-  #getRecentBoxUtilTemplate() {
-    return `
-      <div class="search__recent-util">
-        <button class="search__recent-util--delete-all" type="button">전체삭제</button>
-        <button class="search__recent-util--off" type="button">최근검색어끄기</button>
-      </div>
-    `;
-  }
-
   activate() {
-    this.#searchMainDOM = document.querySelector(".search__input");
-    this.#addInputBoxFocusEvent();
+    this.#searchMainDOM = document.querySelector(".search__main");
+    this.#searchInputDOM = document.querySelector(".search__input");
+    this.#addSearchMainFocusEvent();
     this.#addSubmitEvent();
-    this.#addDeleteEvent();
+    this.#recentSearch.activate();
   }
 
-  #addInputBoxFocusEvent() {
-    this.#searchMainDOM.addEventListener("focusin", (e) =>
-      this.#toggleRecentBoxOpen(e)
-    );
-    // this.#searchMainDOM.addEventListener("focusout", (e) =>
-    //   this.#toggleRecentBoxOpen(e)
-    // );
-  }
-
-  #toggleRecentBoxOpen() {
-    const recentBox = document.querySelector(".search__recent");
-    recentBox.classList.toggle("search__recent--opened");
+  #addSearchMainFocusEvent() {
+    this.#searchMainDOM.addEventListener("focusin", (e) => this.#recentSearch.open(e));
+    this.#searchMainDOM.addEventListener("focusout", (e) => this.#recentSearch.close(e));
   }
 
   #addSubmitEvent() {
@@ -96,32 +52,8 @@ export class SearchMain extends DropdownList {
 
   #handleSubmitEvent(event) {
     event.preventDefault();
-    console.log(event);
-    const inputText = event.target.querySelector("input").value;
-    this.#updateRecentSearchData(inputText);
-    this.#addRecentSearchList(inputText);
+    const newSearchData = event.target.querySelector("input").value;
+    this.#recentSearch.handleNewRecentSearchData(newSearchData);
     event.target.querySelector("input").value = "";
-  }
-
-  #addRecentSearchList(newText) {
-    const recentSearchList = document.querySelector(".search__recent-list");
-    recentSearchList.insertAdjacentHTML(
-      "beforeend",
-      this.getItemTemplate(newText)
-    );
-  }
-
-  #addDeleteEvent() {
-    const deleteBtn = document.querySelector(
-      ".search__recent-util--delete-all"
-    );
-    deleteBtn.addEventListener("click", (e) => this.#deleteAll(e));
-  }
-
-  #deleteAll() {
-    localStorage.removeItem("recentSearch");
-    this.#recentSearchData = [];
-    const recentSearchList = document.querySelector(".search__recent-list");
-    recentSearchList.innerHTML = "";
   }
 }

@@ -1,7 +1,7 @@
 import { DropdownList } from "../DropdownList.js";
 
 export class SearchMain extends DropdownList {
-  #inputBoxDom;
+  #searchMainDOM;
   #recentSearchData;
 
   constructor() {
@@ -69,18 +69,59 @@ export class SearchMain extends DropdownList {
   }
 
   activate() {
-    this.#inputBoxDom = document.querySelector(".search__input");
+    this.#searchMainDOM = document.querySelector(".search__input");
     this.#addInputBoxFocusEvent();
+    this.#addSubmitEvent();
+    this.#addDeleteEvent();
   }
 
   #addInputBoxFocusEvent() {
-    this.#inputBoxDom.addEventListener("click", (e) =>
+    this.#searchMainDOM.addEventListener("focusin", (e) =>
       this.#toggleRecentBoxOpen(e)
     );
+    // this.#searchMainDOM.addEventListener("focusout", (e) =>
+    //   this.#toggleRecentBoxOpen(e)
+    // );
   }
 
   #toggleRecentBoxOpen() {
     const recentBox = document.querySelector(".search__recent");
     recentBox.classList.toggle("search__recent--opened");
+  }
+
+  #addSubmitEvent() {
+    const form = document.querySelector(".search");
+    form.addEventListener("submit", (e) => this.#handleSubmitEvent(e));
+  }
+
+  #handleSubmitEvent(event) {
+    event.preventDefault();
+    console.log(event);
+    const inputText = event.target.querySelector("input").value;
+    this.#updateRecentSearchData(inputText);
+    this.#addRecentSearchList(inputText);
+    event.target.querySelector("input").value = "";
+  }
+
+  #addRecentSearchList(newText) {
+    const recentSearchList = document.querySelector(".search__recent-list");
+    recentSearchList.insertAdjacentHTML(
+      "beforeend",
+      this.getItemTemplate(newText)
+    );
+  }
+
+  #addDeleteEvent() {
+    const deleteBtn = document.querySelector(
+      ".search__recent-util--delete-all"
+    );
+    deleteBtn.addEventListener("click", (e) => this.#deleteAll(e));
+  }
+
+  #deleteAll() {
+    localStorage.removeItem("recentSearch");
+    this.#recentSearchData = [];
+    const recentSearchList = document.querySelector(".search__recent-list");
+    recentSearchList.innerHTML = "";
   }
 }

@@ -72,6 +72,11 @@ export class RecentSearchList extends DropdownList {
     this.#recentSearchDOM.classList.remove("search__recent--opened");
   }
 
+  handleClickEvent(event) {
+    const targetItem = event.target.closest("a");
+    return targetItem.innerText;
+  }
+
   handleNewRecentSearchData(newData) {
     this.#updateRecentSearchData(newData);
     this.#writeOnRecentSearchList(newData);

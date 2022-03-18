@@ -425,10 +425,15 @@ header {
 }
 
 .search__recent-list {
-  top: auto;
   height: 300px;
   overflow: auto;
   margin-top: 5px;
+}
+
+.search__recent-item:hover {
+  color: #4285f4;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .search__recent-util {

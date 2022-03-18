@@ -3,6 +3,7 @@ import { RecentSearchList } from "./RecentSearchList.js";
 export class SearchMain {
   #searchMainDOM;
   #searchInputDOM;
+  #recentSearchDOM;
   #recentSearch;
 
   constructor() {
@@ -34,15 +35,16 @@ export class SearchMain {
 
   activate() {
     this.#searchMainDOM = document.querySelector(".search__main");
-    this.#searchInputDOM = document.querySelector(".search__input");
+    this.#searchInputDOM = document.querySelector(".search__input-textbox");
+    this.#recentSearchDOM = document.querySelector(".search__recent");
     this.#addSearchMainFocusEvent();
     this.#addSubmitEvent();
+    this.#addRecentSearchClickEvent();
     this.#recentSearch.activate();
   }
 
   #addSearchMainFocusEvent() {
     this.#searchMainDOM.addEventListener("focusin", (e) => this.#recentSearch.open(e));
-    this.#searchMainDOM.addEventListener("focusout", (e) => this.#recentSearch.close(e));
   }
 
   #addSubmitEvent() {
@@ -52,8 +54,15 @@ export class SearchMain {
 
   #handleSubmitEvent(event) {
     event.preventDefault();
-    const newSearchData = event.target.querySelector("input").value;
+    const newSearchData = this.#searchInputDOM.value;
     this.#recentSearch.handleNewRecentSearchData(newSearchData);
     event.target.querySelector("input").value = "";
+  }
+
+  #addRecentSearchClickEvent() {
+    this.#recentSearchDOM.addEventListener("click", (e) => {
+      this.#searchInputDOM.value = this.#recentSearch.handleListClickEvent(e);
+      this.#recentSearch.close();
+    });
   }
 }

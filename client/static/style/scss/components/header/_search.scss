@@ -112,10 +112,15 @@
         }
         
         &-list {
-            top:auto;
             height: 300px;
             overflow: auto;
             margin-top: 5px;
+        }
+
+        &-item:hover {
+            color: $blue;
+            cursor: pointer;
+            text-decoration: underline;
         }
 
         &-util {

@@ -21,22 +21,22 @@ export class SearchCategory extends DropdownList {
 
   #getSearchCategoryTemplate() {
     return `
-            <div class="search__category">
-                ${this.#getCurrentTemplate()}
-                ${this.getDropdownListTemplate(this.#categoryData)}
-            </div>
-        `;
+      <div class="search__category">
+          ${this.#getCurrentTemplate()}
+          ${this.getDropdownListTemplate(this.#categoryData)}
+      </div>
+    `;
   }
 
   #getCurrentTemplate() {
     return `
-            <div class="search__category--current">
-                <span class="search__category--current-text">${
-                  this.#selectedSearchCategory
-                }</span>
-                <span class="search__category--current-btn"></span>
-            </div>
-        `;
+      <div class="search__category--current">
+          <span class="search__category--current-text">${
+            this.#selectedSearchCategory
+          }</span>
+          <span class="search__category--current-btn"></span>
+      </div>
+    `;
   }
 
   activate() {

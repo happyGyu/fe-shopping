@@ -2,7 +2,7 @@
     background-color: $white;
     z-index: 1000;
 
-    li {
+    &__item {
         height:30px;
         padding-left: 10px;
 
@@ -11,5 +11,12 @@
             display: flex;
             align-items: center;
         }
+
+        &:hover {
+            color: $blue;
+            cursor: pointer;
+            text-decoration: underline;
+        }
     }
+
 }

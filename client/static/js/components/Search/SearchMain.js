@@ -1,13 +1,16 @@
 import { RecentSearchList } from "./RecentSearchList.js";
+import { AutoCompleteList } from "./AutoComplete.js";
 
 export class SearchMain {
   #searchMainDOM;
   #searchInputDOM;
   #recentSearchDOM;
   #recentSearch;
+  #autoComplete;
 
   constructor() {
     this.#recentSearch = new RecentSearchList();
+    this.#autoComplete = new AutoCompleteList();
   }
 
   get template() {
@@ -17,8 +20,10 @@ export class SearchMain {
   #getSearchMainTemplate() {
     return `
       <div class="search__main">
-        ${this.#getInputboxTemplate()}
-        ${this.#recentSearch.template}  
+        ${this.#getInputboxTemplate()} 
+        ${this.#autoComplete.template}
+        ${this.#recentSearch.template}
+        
       </div>
     `;
   }
@@ -37,10 +42,12 @@ export class SearchMain {
     this.#searchMainDOM = document.querySelector(".search__main");
     this.#searchInputDOM = document.querySelector(".search__input-textbox");
     this.#recentSearchDOM = document.querySelector(".search__recent");
+    this.#recentSearch.activate();
+    this.#autoComplete.activate();
     this.#addSearchMainFocusEvent();
     this.#addSubmitEvent();
     this.#addRecentSearchClickEvent();
-    this.#recentSearch.activate();
+    this.#addTypingEvent();
   }
 
   #addSearchMainFocusEvent() {
@@ -61,8 +68,17 @@ export class SearchMain {
 
   #addRecentSearchClickEvent() {
     this.#recentSearchDOM.addEventListener("click", (e) => {
-      this.#searchInputDOM.value = this.#recentSearch.handleListClickEvent(e);
       this.#recentSearch.close();
+      this.#searchInputDOM.value = this.#recentSearch.handleListClickEvent(e);
+    });
+  }
+
+  #addTypingEvent() {
+    this.#searchInputDOM.addEventListener("input", (e) => {
+      this.#recentSearch.close();
+      this.#autoComplete.open();
+      const prefix = this.#searchInputDOM.value;
+      this.#autoComplete.updateAutoCompleteList(prefix);
     });
   }
 }

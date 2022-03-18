@@ -5,33 +5,34 @@ export class DropdownList {
 
   getDropdownListTemplate(listData) {
     return `
-        <ul class="dropdown-list ${this.dropdownClassName}-list">
+        <ul class="dropdown-list ${this.cssClassName}-list">
             ${listData.map((data) => this.getItemTemplate(data)).join("")}
         </ul>
     `;
   }
 
   getItemTemplate(itemData) {
-    return `<li class="dropdown-list__item ${this.dropdownClassName}-item"><a>${itemData}</a></li>`;
+    return `<li class="dropdown-list__item ${this.cssClassName}-item"><a>${itemData}</a></li>`;
   }
 
-  handleListClickEvent(event) {
+  getClickedText(event) {
     const target = event.target.closest("a");
     return target.innerText;
   }
 
   handleKeyDownEvent(event) {
-    console.log("hi");
-    if (!["ArrowDown", "ArrowUp", "Enter"].includes(event.key)) return;
-    if (event.key === "Enter") {
-      return this.handleEnterKey();
-    } else if (["ArrowDown", "ArrowUp"].includes(event.key)) {
-      this.handleArrowKey(event, key);
-    }
-  }
+    switch (event.key) {
 
-  handleEnterKey() {
-    return this.keyboardFocusedItem.innerText;
+      case "Enter":
+        return this.keyboardFocusedItem.innerText;
+
+      case "ArrowDown", "ArrowUp":
+        this.handleArrowKey(event.key);
+        break;
+        
+      default:
+        console.log('Invalid input.')
+    }
   }
 
   handleArrowKey(arrowKey) {

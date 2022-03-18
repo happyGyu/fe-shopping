@@ -9,7 +9,7 @@ export class RecentSearchList extends DropdownList {
   constructor() {
     super();
     this.#recentSearchData = this.#getRecentSearchData();
-    this.dropdownClassName = "search__recent";
+    this.cssClassName = "search__recent";
   }
 
   #getRecentSearchData() {
@@ -64,19 +64,6 @@ export class RecentSearchList extends DropdownList {
     this.#recentSearchListDOM.innerHTML = "";
   }
 
-  open() {
-    this.#recentSearchDOM.classList.add("search__recent--opened");
-  }
-
-  close() {
-    this.#recentSearchDOM.classList.remove("search__recent--opened");
-  }
-
-  handleClickEvent(event) {
-    const targetItem = event.target.closest("a");
-    return targetItem.innerText;
-  }
-
   handleNewRecentSearchData(newData) {
     this.#updateRecentSearchData(newData);
     this.#writeOnRecentSearchList(newData);
@@ -89,5 +76,13 @@ export class RecentSearchList extends DropdownList {
 
   #writeOnRecentSearchList(newText) {
     this.#recentSearchListDOM.insertAdjacentHTML("beforeend", this.getItemTemplate(newText));
+  }
+
+  open() {
+    this.#recentSearchDOM.classList.add("search__recent--opened");
+  }
+
+  close() {
+    this.#recentSearchDOM.classList.remove("search__recent--opened");
   }
 }

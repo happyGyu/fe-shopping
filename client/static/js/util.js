@@ -1,4 +1,4 @@
-import { serverURL } from "../constant.js";
+import { serverURL } from "./constant.js";
 
 export const getData = (...path) => {
   const url = `${serverURL}${path.join("/")}`;

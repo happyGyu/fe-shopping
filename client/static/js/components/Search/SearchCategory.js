@@ -10,7 +10,7 @@ export class SearchCategory extends DropdownList {
 
   constructor(categoryData) {
     super();
-    this.dropdownClassName = "search__category";
+    this.cssClassName = "search__category";
     this.#categoryData = categoryData;
     this.#selectedSearchCategory = initialSearchCategory;
   }
@@ -22,13 +22,13 @@ export class SearchCategory extends DropdownList {
   #getSearchCategoryTemplate() {
     return `
       <div class="search__category">
-          ${this.#getCurrentTemplate()}
+          ${this.#getCurrentCategoryTemplate()}
           ${this.getDropdownListTemplate(this.#categoryData)}
       </div>
     `;
   }
 
-  #getCurrentTemplate() {
+  #getCurrentCategoryTemplate() {
     return `
       <div class="search__category--current">
           <span class="search__category--current-text">${
@@ -42,15 +42,12 @@ export class SearchCategory extends DropdownList {
   activate() {
     this.#cacheDOM();
     this.#addCategoryClickEvent();
-    this.#addCategoryListClickEvent();
-    this.#addKeyDownEvent();
+    this.#addCategoryItemClickEvent();
   }
 
   #cacheDOM() {
     this.#categoryDOM = document.querySelector(".search__category");
-    this.#currCategoryTextDOM = this.#categoryDOM.querySelector(
-      ".search__category--current-text"
-    );
+    this.#currCategoryTextDOM = document.querySelector(".search__category--current-text");
     this.#categoryListDOM = this.#categoryDOM.querySelector(".dropdown-list");
   }
 
@@ -60,22 +57,14 @@ export class SearchCategory extends DropdownList {
     );
   }
 
-  #addCategoryListClickEvent() {
+  #addCategoryItemClickEvent() {
     this.#categoryListDOM.addEventListener("click", (e) =>
-      this.#changeSelectedCategory(e)
+      this.#changeCurrSelectedCategory(e)
     );
   }
 
-  #addKeyDownEvent() {
-    document
-      .querySelector(".search__category--current")
-      .addEventListener("keydown", () => {
-        console.log("hi");
-      });
-  }
-
-  #changeSelectedCategory(event) {
-    this.#currCategoryTextDOM.innerText = this.handleListClickEvent(event);
+  #changeCurrSelectedCategory(event) {
+    this.#currCategoryTextDOM.innerText = this.getClickedText(event);
   }
 
   #toggleCategoryListOpen() {

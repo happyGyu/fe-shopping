@@ -39,19 +39,26 @@ export class SearchMain {
   }
 
   activate() {
-    this.#searchMainDOM = document.querySelector(".search__main");
-    this.#searchInputDOM = document.querySelector(".search__input-textbox");
-    this.#recentSearchDOM = document.querySelector(".search__recent");
     this.#recentSearch.activate();
     this.#autoComplete.activate();
+    this.#cacheDOM();
     this.#addSearchMainFocusEvent();
     this.#addSubmitEvent();
     this.#addRecentSearchClickEvent();
     this.#addTypingEvent();
   }
 
+  #cacheDOM() {
+    this.#searchMainDOM = document.querySelector(".search__main");
+    this.#searchInputDOM = document.querySelector(".search__input-textbox");
+    this.#recentSearchDOM = document.querySelector(".search__recent");
+  }
+
   #addSearchMainFocusEvent() {
-    this.#searchMainDOM.addEventListener("focusin", (e) => this.#recentSearch.open(e));
+    this.#searchMainDOM.addEventListener("focusin", () => {
+      this.#autoComplete.close();
+      this.#recentSearch.open();
+    });
   }
 
   #addSubmitEvent() {
@@ -63,13 +70,13 @@ export class SearchMain {
     event.preventDefault();
     const newSearchData = this.#searchInputDOM.value;
     this.#recentSearch.handleNewRecentSearchData(newSearchData);
-    event.target.querySelector("input").value = "";
+    this.#searchInputDOM.value = "";
   }
 
   #addRecentSearchClickEvent() {
     this.#recentSearchDOM.addEventListener("click", (e) => {
       this.#recentSearch.close();
-      this.#searchInputDOM.value = this.#recentSearch.handleListClickEvent(e);
+      this.#searchInputDOM.value = this.#recentSearch.getClickedText(e);
     });
   }
 

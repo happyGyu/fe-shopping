@@ -12,3 +12,14 @@ export const getAutoCompleteData = (prefix) => {
     .then((res) => res.json())
     .then((data) => data.suggestions.map((v) => v.value));
 };
+
+export const debounce = (callback, time) => {
+  let debounceID;
+  return () => {
+    if (debounceID) {
+      clearTimeout(debounceID);
+    }
+    debounceID = setTimeout(callback, time);
+  };
+};
+

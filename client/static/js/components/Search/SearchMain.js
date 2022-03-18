@@ -1,5 +1,7 @@
 import { RecentSearchList } from "./RecentSearchList.js";
 import { AutoCompleteList } from "./AutoComplete.js";
+import { debounce } from "../../util.js";
+import { autoCompleteDelay } from "../../constant.js";
 
 export class SearchMain {
   #searchMainDOM;
@@ -56,8 +58,7 @@ export class SearchMain {
 
   #addSearchMainFocusEvent() {
     this.#searchMainDOM.addEventListener("focusin", () => {
-      this.#autoComplete.close();
-      this.#recentSearch.open();
+      this.#openOneDropdown("recent");
     });
   }
 
@@ -81,11 +82,31 @@ export class SearchMain {
   }
 
   #addTypingEvent() {
-    this.#searchInputDOM.addEventListener("input", (e) => {
+    this.#searchInputDOM.addEventListener(
+      "input",
+      debounce(() => {
+        this.#handleTypingEvent();
+      }, autoCompleteDelay)
+    );
+  }
+
+  #handleTypingEvent() {
+    const typedKeyword = this.#searchInputDOM.value;
+    if (typedKeyword === "") {
+      this.#openOneDropdown("recent");
+    } else {
+      this.#openOneDropdown("autoComplete");
+      this.#autoComplete.updateAutoCompleteList(typedKeyword);
+    }
+  }
+
+  #openOneDropdown(subject) {
+    if (subject === "recent") {
+      this.#recentSearch.open();
+      this.#autoComplete.close();
+    } else if (subject === "autoComplete") {
       this.#recentSearch.close();
       this.#autoComplete.open();
-      const prefix = this.#searchInputDOM.value;
-      this.#autoComplete.updateAutoCompleteList(prefix);
-    });
+    }
   }
 }

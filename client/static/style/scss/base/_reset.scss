@@ -72,3 +72,7 @@ a:hover {
 i {
 	display: block;
 }
+
+textarea:focus, input:focus{
+    outline: none;
+}

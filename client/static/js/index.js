@@ -1,14 +1,13 @@
-import { getData } from "./util/util.js";
-import { Carousel } from "./components/Carousel.js";
+import { getData } from "./util.js";
+import { Renderer } from "./Renderer.js";
 
-function main() {
-  getData("carousel").then(renderCarousel);
-}
-
-function renderCarousel(carouselData) {
-  const carousel = new Carousel(carouselData);
-  document.querySelector("body").insertAdjacentHTML("beforeend", carousel.template);
-  carousel.activate();
+async function main() {
+  const renderer = new Renderer();
+  const carouselData = await getData("carousel");
+  renderer.addCarousel(carouselData);
+  const categoryData = await getData("search/category");
+  renderer.addSearchCategory(categoryData);
+  renderer.addSearchMain();
 }
 
 main();

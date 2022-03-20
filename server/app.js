@@ -7,7 +7,7 @@ const app = express();
 const __dirname = path.resolve();
 const port = process.env.PORT || 3000;
 
-app.use(express.static(path.resolve(__dirname, "client", "static")));
+app.use(express.static(path.resolve(__dirname, "client/static")));
 app.use("/search", searchRouter);
 app.get("/carousel", (req, res) => {
   res.json(carouselData);

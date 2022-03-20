@@ -2,5 +2,9 @@
 @import 'base/variable';
 @import 'base/layout';
 
-@import 'components/header';
+@import 'mixin';
+
+@import 'components/header/header';
 @import 'components/carousel';
+@import 'components/header/search';
+@import 'components/dropDownList';

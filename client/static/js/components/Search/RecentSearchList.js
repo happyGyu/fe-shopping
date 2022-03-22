@@ -62,6 +62,7 @@ export class RecentSearchList extends DropdownList {
     localStorage.removeItem("recentSearch");
     this.#recentSearchData = [];
     this.#recentSearchListDOM.innerHTML = "";
+    this.keyboardFocusedItem = null;
   }
 
   handleNewRecentSearchData(newData) {

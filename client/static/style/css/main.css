@@ -481,4 +481,9 @@ header {
   cursor: pointer;
   text-decoration: underline;
 }
+
+.dropdown-list .keyboard-focusing {
+  color: #4285f4;
+  text-decoration: underline;
+}
 /*# sourceMappingURL=main.css.map */

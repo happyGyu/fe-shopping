@@ -48,6 +48,7 @@ export class SearchMain {
     this.#addSubmitEvent();
     this.#addRecentSearchClickEvent();
     this.#addTypingEvent();
+    this.#addKeydownEvent();
   }
 
   #cacheDOM() {
@@ -109,4 +110,9 @@ export class SearchMain {
       this.#autoComplete.open();
     }
   }
+
+  #addKeydownEvent() {
+    this.#searchInputDOM.addEventListener('keydown', (e) => this.#recentSearch.handleKeyDownEvent(e));
+  }
+
 }

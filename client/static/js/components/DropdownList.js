@@ -21,29 +21,37 @@ export class DropdownList {
   }
 
   handleKeyDownEvent(event) {
-    switch (event.key) {
-
-      case "Enter":
-        return this.keyboardFocusedItem.innerText;
-
-      case "ArrowDown", "ArrowUp":
-        this.handleArrowKey(event.key);
-        break;
-        
-      default:
-        console.log('Invalid input.')
+    if (["ArrowUp", "ArrowDown"].includes(event.key)) {
+      this.handleArrowKey(event.key);
     }
   }
 
   handleArrowKey(arrowKey) {
-    const newFocusedItem =
-      arrowKey === "ArrowDown"
-        ? this.keyboardFocusedItem.nextSibling
-        : this.keyboardFocusedItem.prevSibling;
+    if (this.keyboardFocusedItem) {
+      this.moveKeyBoardFocus(arrowKey);
+    } else {
+      this.focusFirstItem();
+    }
+  }
+
+  moveKeyBoardFocus(arrowKey) {
+    const newFocusedItem = this.getNewFocusedItem(arrowKey);
     if (!newFocusedItem) return;
     this.toggleKeyboardFocus(this.keyboardFocusedItem);
     this.toggleKeyboardFocus(newFocusedItem);
     this.keyboardFocusedItem = newFocusedItem;
+  }
+
+  getNewFocusedItem(arrowKey) {
+    const newFocusedItem = arrowKey === "ArrowDown"
+      ? this.keyboardFocusedItem.nextElementSibling
+      : this.keyboardFocusedItem.previousElementSibling;
+    return newFocusedItem;
+  }
+
+  focusFirstItem() {
+    this.keyboardFocusedItem = document.querySelector(`.${this.cssClassName}-item`);
+    this.toggleKeyboardFocus(this.keyboardFocusedItem);
   }
 
   toggleKeyboardFocus(target) {

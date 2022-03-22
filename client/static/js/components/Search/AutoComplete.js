@@ -1,14 +1,14 @@
 import { DropdownList } from "../DropdownList.js";
-import { getAutoCompleteData } from "../../util.js";
+import { getAutoCompleteSuggestions } from "../../util.js";
 
 export class AutoCompleteList extends DropdownList {
   #autoCompleteDOM;
-  #autoCompleteData;
+  #autoCompleteSuggestions;
 
   constructor() {
     super();
     this.cssClassName = "search__auto-complete";
-    this.#autoCompleteData = [];
+    this.#autoCompleteSuggestions = [];
   }
 
   get template() {
@@ -18,7 +18,7 @@ export class AutoCompleteList extends DropdownList {
   #getAutoCompleteTemplate() {
     return `
         <div class="search__auto-complete">
-            ${this.getDropdownListTemplate(this.#autoCompleteData)}
+            ${this.getDropdownListTemplate(this.#autoCompleteSuggestions)}
         </div>
     `;
   }
@@ -28,8 +28,8 @@ export class AutoCompleteList extends DropdownList {
   }
 
   async updateAutoCompleteList(prefix) {
-    this.#autoCompleteData = await getAutoCompleteData(prefix);
-    this.#autoCompleteDOM.innerHTML = this.getDropdownListTemplate(this.#autoCompleteData);
+    this.#autoCompleteSuggestions = await getAutoCompleteSuggestions(prefix);
+    this.#autoCompleteDOM.innerHTML = this.getDropdownListTemplate(this.#autoCompleteSuggestions);
   }
 
   open() {

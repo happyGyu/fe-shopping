@@ -4,11 +4,15 @@ export class RecentSearchList extends DropdownList {
   #recentSearchDOM;
   #recentSearchListDOM;
   #deleteBtnDOM;
+  #onOffBtnDOM;
+  #recentSearchContentDOM;
   #recentSearchData;
+  #turnedOn;
 
   constructor() {
     super();
     this.#recentSearchData = this.#getRecentSearchData();
+    this.#turnedOn = true;
     this.cssClassName = "search__recent";
   }
 
@@ -23,10 +27,22 @@ export class RecentSearchList extends DropdownList {
   #getRecentSearchTemplate() {
     return `
       <div class="search__recent">
-        ${this.#getRecentSearchTitleTemplate()}
-        ${this.getDropdownListTemplate(this.#recentSearchData)}
+        <div class="search__recent-content">
+          ${this.#getRecentSearchContentTemplate()}
+        </div>
         ${this.#getRecentSearchUtilTemplate()}
       </div> 
+    `;
+  }
+
+  #getRecentSearchContentTemplate() {
+    return this.#turnedOn ? this.#getTurnedOnTemplate() : this.#getTurnedOffTemplate();
+  }
+
+  #getTurnedOnTemplate() {
+    return `
+      ${this.#getRecentSearchTitleTemplate()}
+      ${this.getDropdownListTemplate(this.#recentSearchData)}
     `;
   }
 
@@ -34,11 +50,15 @@ export class RecentSearchList extends DropdownList {
     return `<div class="search__recent-title">최근 검색어</div>`;
   }
 
+  #getTurnedOffTemplate() {
+    return `<div class="search__recent-off-message">최근 검색어 저장 기능이 꺼져 있습니다.</div>`;
+  }
+
   #getRecentSearchUtilTemplate() {
     return `
       <div class="search__recent-util">
         <button class="search__recent-util--delete-all" type="button">전체삭제</button>
-        <button class="search__recent-util--off" type="button">최근검색어끄기</button>
+        <button class="search__recent-util--onoff on" type="button">최근검색어끄기</button>
       </div>
     `;
   }
@@ -46,16 +66,19 @@ export class RecentSearchList extends DropdownList {
   activate() {
     this.#cacheDOM();
     this.#addDeleteBtnEvent();
+    this.#addOnOffBtnEvent();
   }
 
   #cacheDOM() {
     this.#recentSearchDOM = document.querySelector(".search__recent");
     this.#recentSearchListDOM = document.querySelector(".search__recent-list");
+    this.#recentSearchContentDOM = document.querySelector(".search__recent-content");
     this.#deleteBtnDOM = document.querySelector(".search__recent-util--delete-all");
+    this.#onOffBtnDOM = document.querySelector(".search__recent-util--onoff");
   }
 
   #addDeleteBtnEvent() {
-    this.#deleteBtnDOM.addEventListener("click", (e) => this.#deleteAll(e));
+    this.#deleteBtnDOM.addEventListener("click", () => this.#deleteAll());
   }
 
   #deleteAll() {
@@ -65,7 +88,17 @@ export class RecentSearchList extends DropdownList {
     this.keyboardFocusedItem = null;
   }
 
+  #addOnOffBtnEvent() {
+    this.#onOffBtnDOM.addEventListener("click", () => this.#switchOnOff());
+  }
+
+  #switchOnOff() {
+    this.#turnedOn = !this.#turnedOn;
+    this.#recentSearchContentDOM.innerHTML = this.#getRecentSearchContentTemplate();
+  }
+
   handleNewRecentSearchData(newData) {
+    if (this.#recentSearchData.indexOf(newData) !== -1) return;
     this.#updateRecentSearchData(newData);
     this.#writeOnRecentSearchList(newData);
   }
@@ -85,5 +118,6 @@ export class RecentSearchList extends DropdownList {
 
   close() {
     this.#recentSearchDOM.classList.remove("search__recent--opened");
+    this.keyboardFocusedItem = null;
   }
 }

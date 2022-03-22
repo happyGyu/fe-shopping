@@ -24,12 +24,17 @@ export class AutoCompleteList extends DropdownList {
   }
 
   activate() {
+    this.#cacheDOM();
+  }
+
+  #cacheDOM() {
     this.#autoCompleteDOM = document.querySelector(".search__auto-complete");
   }
 
   async updateAutoCompleteList(prefix) {
     this.#autoCompleteSuggestions = await getAutoCompleteSuggestions(prefix);
     this.#autoCompleteDOM.innerHTML = this.getDropdownListTemplate(this.#autoCompleteSuggestions);
+    this.keyboardFocusedItem = null;
   }
 
   open() {
@@ -38,5 +43,6 @@ export class AutoCompleteList extends DropdownList {
 
   close() {
     this.#autoCompleteDOM.classList.remove("search__auto-complete--opened");
+    this.keyboardFocusedItem = null;
   }
 }

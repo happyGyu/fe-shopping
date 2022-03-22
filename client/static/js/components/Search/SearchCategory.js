@@ -64,7 +64,7 @@ export class SearchCategory extends DropdownList {
   }
 
   #changeCurrSelectedCategory(event) {
-    this.#currCategoryTextDOM.innerText = this.getClickedText(event);
+    this.#currCategoryTextDOM.innerText = this.getClickedItemText(event);
   }
 
   #toggleCategoryListOpen() {

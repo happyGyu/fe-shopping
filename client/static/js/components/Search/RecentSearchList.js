@@ -95,6 +95,7 @@ export class RecentSearchList extends DropdownList {
   #switchOnOff() {
     this.#turnedOn = !this.#turnedOn;
     this.#recentSearchContentDOM.innerHTML = this.#getRecentSearchContentTemplate();
+    this.#onOffBtnDOM.innerHTML = this.#turnedOn ? "최근검색어끄기" : "최근검색어켜기";
   }
 
   handleNewRecentSearchData(newData) {

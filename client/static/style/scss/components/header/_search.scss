@@ -83,7 +83,7 @@
         &--opened {
             max-height: 400px;
             border: 1px solid $gray;
-        } 
+        }
         
         &-title {
             @include verticalCenter;
@@ -93,6 +93,13 @@
             border-bottom: 1px solid $gray;
         }
         
+        &-off-message {
+            @include verticalCenter;
+            font-weight: 600;
+            justify-content: center;
+            height: 200px;
+        }
+
         &-list {
             height: 300px;
             overflow: auto;

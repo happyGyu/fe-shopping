@@ -8,6 +8,7 @@ async function main() {
   const categoryData = await getData("search/category");
   renderer.addSearchCategory(categoryData);
   renderer.addSearchMain();
+  renderer.addCategory();
 }
 
 main();

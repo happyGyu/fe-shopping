@@ -128,25 +128,6 @@ header {
           align-items: flex-end;
 }
 
-.header-main .category {
-  margin-right: 30px;
-}
-
-.header-main .category__btn {
-  background: url("https://img1a.coupangcdn.com/image/coupang/common/pc_header_img_sprite_180104.png") no-repeat;
-  width: 110px;
-  height: 115px;
-  position: relative;
-}
-
-.header-main .category__text {
-  color: #FFF;
-  position: absolute;
-  top: 75px;
-  width: 100%;
-  text-align: center;
-}
-
 .header-main .banner__main {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -246,44 +227,6 @@ header {
   background-size: 12px;
   width: 12px;
   height: 12px;
-}
-
-.carousel {
-  position: relative;
-}
-
-.carousel__poster {
-  display: none;
-}
-
-.carousel__poster img {
-  width: 1920px;
-  height: 450px;
-  position: absolute;
-  left: 50%;
-  margin-left: -960px;
-}
-
-.carousel__poster--selected {
-  display: block;
-}
-
-.carousel__thumbnails {
-  position: absolute;
-  right: -10px;
-  top: 45px;
-  -webkit-box-shadow: -4px 4px 4px rgba(0, 0, 0, 0.3);
-          box-shadow: -4px 4px 4px rgba(0, 0, 0, 0.3);
-}
-
-.carousel__thumbnail {
-  line-height: 0;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-}
-
-.carousel__thumbnail--selected {
-  border: 2px solid #4285f4;
 }
 
 .search {
@@ -418,6 +361,20 @@ header {
   border-bottom: 1px solid #ddd;
 }
 
+.search__recent-off-message {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  font-weight: 600;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  height: 200px;
+}
+
 .search__recent-list {
   height: 300px;
   overflow: auto;
@@ -456,6 +413,118 @@ header {
   border: 1px solid #ddd;
 }
 
+.category {
+  margin-right: 30px;
+  position: relative;
+}
+
+.category__btn {
+  background: url("https://img1a.coupangcdn.com/image/coupang/common/pc_header_img_sprite_180104.png") no-repeat;
+  width: 110px;
+  height: 115px;
+  position: relative;
+}
+
+.category__text {
+  color: #FFF;
+  position: absolute;
+  top: 75px;
+  width: 100%;
+  text-align: center;
+}
+
+.category ul {
+  border-top: 1px solid #ddd;
+}
+
+.category__layer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: absolute;
+  top: 100%;
+  z-index: 1000;
+  background-color: #FFF;
+}
+
+.category__layer-main {
+  width: 170px;
+  font-size: 0.875rem;
+}
+
+.category__layer-main li {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 30px;
+  width: 100%;
+}
+
+.category__layer-main li:hover {
+  color: #4285f4;
+  text-decoration: underline;
+}
+
+.category__layer-main .selected {
+  color: #4285f4;
+  font-weight: 800;
+}
+
+.category__layer-extended {
+  width: 170px;
+}
+
+.category__layer-extended li {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 20px;
+}
+
+.carousel {
+  position: relative;
+}
+
+.carousel__poster {
+  display: none;
+}
+
+.carousel__poster img {
+  width: 1920px;
+  height: 450px;
+  position: absolute;
+  left: 50%;
+  margin-left: -960px;
+}
+
+.carousel__poster--selected {
+  display: block;
+}
+
+.carousel__thumbnails {
+  position: absolute;
+  right: -10px;
+  top: 45px;
+  -webkit-box-shadow: -4px 4px 4px rgba(0, 0, 0, 0.3);
+          box-shadow: -4px 4px 4px rgba(0, 0, 0, 0.3);
+}
+
+.carousel__thumbnail {
+  line-height: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.carousel__thumbnail--selected {
+  border: 2px solid #4285f4;
+}
+
 .dropdown-list {
   background-color: #FFF;
   z-index: 1000;
@@ -479,6 +548,11 @@ header {
 .dropdown-list__item:hover {
   color: #4285f4;
   cursor: pointer;
+  text-decoration: underline;
+}
+
+.dropdown-list .keyboard-focusing {
+  color: #4285f4;
   text-decoration: underline;
 }
 /*# sourceMappingURL=main.css.map */

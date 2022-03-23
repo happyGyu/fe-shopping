@@ -1,16 +1,16 @@
 import { serverURL } from "./constant.js";
 
-export const getData = (...path) => {
+export const getData = async (...path) => {
   const url = `${serverURL}${path.join("/")}`;
-  return fetch(url).then((response) => response.json());
+  const data = (await fetch(url)).json();
+  return data;
 };
 
-export const getAutoCompleteData = (prefix) => {
-  return fetch(
-    `https://completion.amazon.com/api/2017/suggestions?mid=ATVPDKIKX0DER&alias=aps&prefix=${[prefix]}`
-  )
-    .then((res) => res.json())
-    .then((data) => data.suggestions.map((v) => v.value));
+export const getAutoCompleteSuggestions = async (prefix) => {
+  const amazonURL = `https://completion.amazon.com/api/2017/suggestions?mid=ATVPDKIKX0DER&alias=aps&prefix=${prefix}`;
+  const autoCompleteData = await (await fetch(amazonURL)).json();
+  const autoCompleteSuggestions = autoCompleteData.suggestions.map((v) => v.value);
+  return autoCompleteSuggestions;
 };
 
 export const debounce = (callback, time) => {
@@ -22,4 +22,9 @@ export const debounce = (callback, time) => {
     debounceID = setTimeout(callback, time);
   };
 };
+
+export const cross2D = (v1, v2) => {
+  return v1[0] * v2[1] - v1[1] * v2[0];
+};
+
 

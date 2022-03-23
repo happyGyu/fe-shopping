@@ -1,27 +1,29 @@
 import { CategoryModel } from "./Model.js";
 import { CategoryView } from "./View.js";
 import { cross2D } from "../../util.js";
+import { smartLayerDelay } from "../../constant.js";
 
 export class CategoryController {
+  #smartLayer = {
+    timeoutID: null,
+    selectedItem: null,
+    refMouseCoord: null,
+    triangleTopCoord: null,
+    triangleBottomCoord: null,
+  };
+
   constructor() {
     this.model = new CategoryModel();
     this.view = new CategoryView();
-
-    //test중
-    this.currLi;
-    this.refCoord;
-    this.timeoutId;
   }
 
   activate() {
-    this.cacheDOM();
     this.model.activate();
-    this.addCategoryBtnEvent();
-    this.addCategoryEvent();
-    this.addMouseMoveEvent();
+    this.#cacheDOM();
+    this.#addMouseEvents();
   }
 
-  cacheDOM() {
+  #cacheDOM() {
     this.categoryDOM = document.querySelector(".category");
     this.categoryBtnDOM = document.querySelector(".category__btn");
     this.categoryLayerDOM = document.querySelector(".category__layer");
@@ -29,76 +31,96 @@ export class CategoryController {
     this.categoryExtendedLayerDOM = document.querySelector(".category__layer-extended");
   }
 
-  addCategoryBtnEvent() {
-    this.categoryBtnDOM.addEventListener("mouseover", () => this.renderMainLayer());
+  #addMouseEvents() {
+    this.#addCategoryEnterEvent();
+    this.#addCategoryLeaveEvent();
+    this.#addMainLayerMoveEvent();
+    this.#addMainLayerOutEvent();
   }
 
-  addCategoryEvent() {
-    this.categoryDOM.addEventListener("mouseleave", () => this.clearLayer());
+  #addCategoryEnterEvent() {
+    this.categoryDOM.addEventListener("mouseenter", () => this.#renderMainLayer());
   }
 
-  renderMainLayer() {
+  #renderMainLayer() {
     const mainLayerData = this.model.itemNameStore;
-    this.categoryMainLayerDOM.innerHTML = this.view.getMainLayerTemplate(mainLayerData);
+    const mainLayerTemplate = this.view.getMainLayerTemplate(mainLayerData);
+    this.categoryMainLayerDOM.innerHTML = mainLayerTemplate;
   }
 
-  renderExtendedLayer(parentName) {
-    const extendedLayerData = this.model.depthStore[parentName];
-    const extendedLayerTemplate = this.view.getExtendedLayerTemplate(extendedLayerData);
-    this.categoryExtendedLayerDOM.innerHTML = extendedLayerTemplate;
-    this.getCoordinate();
+  #addCategoryLeaveEvent() {
+    this.categoryDOM.addEventListener("mouseleave", () => this.#clearLayer());
   }
 
-  clearLayer() {
+  #clearLayer() {
     this.categoryMainLayerDOM.innerHTML = "";
     this.categoryExtendedLayerDOM.innerHTML = "";
   }
 
-  //테스트중
-  addMouseMoveEvent() {
-    this.categoryMainLayerDOM.addEventListener("mousemove", (e) => this.handleMouseMoveEvent(e));
-    this.categoryMainLayerDOM.addEventListener("mouseout", () => this.handleMouseOutEvent());
+  #addMainLayerMoveEvent() {
+    this.categoryMainLayerDOM.addEventListener("mousemove", (e) => this.#handleMouseMoveEvent(e));
   }
 
-  getCoordinate() {
+  #handleMouseMoveEvent(event) {
+    const currItem = event.target;
+    if (!this.#isValidItem(currItem)) return;
+    const currCoord = [event.clientX, event.clientY];
+
+    if (this.#isInLayerTriangle(currCoord)) {
+      this.#smartLayer.timeoutID = setTimeout(() => {
+        this.renderExtendedLayer(currItem);
+      }, smartLayerDelay);
+    } else {
+      this.renderExtendedLayer(currItem);
+    }
+    this.#smartLayer.refMouseCoord = currCoord;
+    this.#smartLayer.selectedItem = currItem;
+  }
+
+  #isValidItem(currItem) {
+    const isListItem = currItem.localName === "li";
+    const isChanged = currItem !== this.#smartLayer.selectedItem;
+    return isListItem && isChanged;
+  }
+
+  #isInLayerTriangle(targetCoord) {
+    if (!this.#smartLayer.refMouseCoord) return false;
+    const [targetX, targetY] = targetCoord;
+    const [refMouseX, refMouseY] = this.#smartLayer.refMouseCoord;
+    const [topX, topY] = this.#smartLayer.triangleTopCoord;
+    const [bottomX, bottomY] = this.#smartLayer.triangleBottomCoord;
+
+    const vectorToTop = [topX - refMouseX, topY - refMouseY];
+    const vectorToBottom = [bottomX - refMouseX, bottomY - refMouseY];
+    const vectorToTarget = [targetX - refMouseX, targetY - refMouseY];
+
+    const topTargetCross = cross2D(vectorToTop, vectorToTarget);
+    const targetBottomCross = cross2D(vectorToTarget, vectorToBottom);
+
+    return topTargetCross * targetBottomCross >= 0;
+  }
+
+  renderExtendedLayer(parentItem) {
+    const targetName = parentItem.dataset.name;
+    const extendedLayerData = this.model.depthStore[targetName];
+    const extendedLayerTemplate = this.view.getExtendedLayerTemplate(extendedLayerData);
+    this.categoryExtendedLayerDOM.innerHTML = extendedLayerTemplate;
+    this.#updateSmartLayerCoordinate();
+  }
+
+  #updateSmartLayerCoordinate() {
     const topItemRect = this.categoryExtendedLayerDOM.firstElementChild.getBoundingClientRect();
     const bottomItemRect = this.categoryExtendedLayerDOM.lastElementChild.getBoundingClientRect();
-    this.topX = topItemRect.left;
-    this.topY = topItemRect.top;
-    this.bottomX = bottomItemRect.left;
-    this.bottomY = bottomItemRect.bottom;
+    this.#smartLayer.triangleTopCoord = [topItemRect.left, topItemRect.top];
+    this.#smartLayer.triangleBottomCoord = [bottomItemRect.left, bottomItemRect.bottom];
   }
 
-  handleMouseMoveEvent(event) {
-    if (event.target.nodeName !== "LI") return;
-    if (event.target === this.currLi) return;
-    const currCoord = [event.clientX, event.clientY];
-    if (this.refCoord) {
-      if (this.isInTriangle(...currCoord)) {
-        this.timeoutId = setTimeout(() => {
-          const targetName = event.target.dataset.name;
-          this.renderExtendedLayer(targetName);
-        }, 500);
-      } else {
-        const targetName = event.target.dataset.name;
-        this.renderExtendedLayer(targetName);
-      }
-    }
-    this.refCoord = currCoord;
-    this.currLi = event.target;
+  #addMainLayerOutEvent() {
+    this.categoryMainLayerDOM.addEventListener("mouseout", () => this.#handleMouseOutEvent());
   }
 
-  handleMouseOutEvent() {
-    clearTimeout(this.timeoutId);
-    this.timeoutId = null;
-  }
-
-  isInTriangle(x, y) {
-    const vectorToTop = [this.topX - this.refCoord[0], this.topY - this.refCoord[1]];
-    const vectorToBottom = [this.bottomX - this.refCoord[0], this.bottomY - this.refCoord[1]];
-    const vectorToTarget = [x - this.refCoord[0], y - this.refCoord[1]];
-    const crossTopTarget = cross2D(vectorToTop, vectorToTarget);
-    const crossTargetBottom = cross2D(vectorToTarget, vectorToBottom);
-    return crossTopTarget * crossTargetBottom >= 0;
+  #handleMouseOutEvent() {
+    clearTimeout(this.#smartLayer.timeoutID);
+    this.#smartLayer.timeoutID = null;
   }
 }

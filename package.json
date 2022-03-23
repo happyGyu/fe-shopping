@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/happyGyu/fe-shopping#readme",
   "dependencies": {
-    "express": "^4.17.3"
+    "express": "^4.17.3",
+    "mathjs": "^10.4.0"
   },
   "type": "module"
 }

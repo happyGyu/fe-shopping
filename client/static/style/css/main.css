@@ -463,10 +463,13 @@ header {
   width: 100%;
 }
 
+.category__layer-main li:hover {
+  color: #4285f4;
+  text-decoration: underline;
+}
+
 .category__layer-extended {
   width: 170px;
-  border: 1px solid #ddd;
-  padding: 10px;
 }
 
 .category__layer-extended li {
@@ -476,7 +479,7 @@ header {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  height: 20px;
+  height: 30px;
 }
 
 .carousel {

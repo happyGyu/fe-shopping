@@ -37,16 +37,19 @@
                 height: 30px;
                 width: 100%;
             }
+            li:hover {
+                color: $blue;
+                text-decoration: underline;
+            }
+
         }
 
         &-extended {
             width: 170px;
-            border: 1px solid $gray;
-            padding: 10px;
 
             li {
                 @include verticalCenter;
-                height: 20px;
+                height: 30px;
             }
         }
     }

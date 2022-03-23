@@ -1,10 +1,16 @@
 import { CategoryModel } from "./Model.js";
 import { CategoryView } from "./View.js";
+import { cross2D } from "../../util.js";
 
 export class CategoryController {
   constructor() {
     this.model = new CategoryModel();
     this.view = new CategoryView();
+
+    //test중
+    this.currLi;
+    this.refCoord;
+    this.timeoutId;
   }
 
   activate() {
@@ -12,6 +18,7 @@ export class CategoryController {
     this.model.activate();
     this.addCategoryBtnEvent();
     this.addCategoryEvent();
+    this.addMouseMoveEvent();
   }
 
   cacheDOM() {
@@ -33,7 +40,13 @@ export class CategoryController {
   renderMainLayer() {
     const mainLayerData = this.model.itemNameStore;
     this.categoryMainLayerDOM.innerHTML = this.view.getMainLayerTemplate(mainLayerData);
-    this.addItemHoverEvent();
+  }
+
+  renderExtendedLayer(parentName) {
+    const extendedLayerData = this.model.depthStore[parentName];
+    const extendedLayerTemplate = this.view.getExtendedLayerTemplate(extendedLayerData);
+    this.categoryExtendedLayerDOM.innerHTML = extendedLayerTemplate;
+    this.getCoordinate();
   }
 
   clearLayer() {
@@ -41,19 +54,51 @@ export class CategoryController {
     this.categoryExtendedLayerDOM.innerHTML = "";
   }
 
-  addItemHoverEvent() {
-    this.categoryMainLayerDOM.addEventListener("mouseover", (e) => this.handleMouseHoverEvent(e));
+  //테스트중
+  addMouseMoveEvent() {
+    this.categoryMainLayerDOM.addEventListener("mousemove", (e) => this.handleMouseMoveEvent(e));
+    this.categoryMainLayerDOM.addEventListener("mouseout", () => this.handleMouseOutEvent());
   }
 
-  handleMouseHoverEvent(event) {
+  getCoordinate() {
+    const topItemRect = this.categoryExtendedLayerDOM.firstElementChild.getBoundingClientRect();
+    const bottomItemRect = this.categoryExtendedLayerDOM.lastElementChild.getBoundingClientRect();
+    this.topX = topItemRect.left;
+    this.topY = topItemRect.top;
+    this.bottomX = bottomItemRect.left;
+    this.bottomY = bottomItemRect.bottom;
+  }
+
+  handleMouseMoveEvent(event) {
     if (event.target.nodeName !== "LI") return;
-    const targetName = event.target.dataset.name;
-    this.renderExtendedLayer(targetName);
+    if (event.target === this.currLi) return;
+    const currCoord = [event.clientX, event.clientY];
+    if (this.refCoord) {
+      if (this.isInTriangle(...currCoord)) {
+        this.timeoutId = setTimeout(() => {
+          const targetName = event.target.dataset.name;
+          this.renderExtendedLayer(targetName);
+        }, 500);
+      } else {
+        const targetName = event.target.dataset.name;
+        this.renderExtendedLayer(targetName);
+      }
+    }
+    this.refCoord = currCoord;
+    this.currLi = event.target;
   }
 
-  renderExtendedLayer(parentName) {
-    const extendedLayerData = this.model.depthStore[parentName];
-    const extendedLayerTemplate = this.view.getExtendedLayerTemplate(extendedLayerData);
-    this.categoryExtendedLayerDOM.innerHTML = extendedLayerTemplate;
+  handleMouseOutEvent() {
+    clearTimeout(this.timeoutId);
+    this.timeoutId = null;
+  }
+
+  isInTriangle(x, y) {
+    const vectorToTop = [this.topX - this.refCoord[0], this.topY - this.refCoord[1]];
+    const vectorToBottom = [this.bottomX - this.refCoord[0], this.bottomY - this.refCoord[1]];
+    const vectorToTarget = [x - this.refCoord[0], y - this.refCoord[1]];
+    const crossTopTarget = cross2D(vectorToTop, vectorToTarget);
+    const crossTargetBottom = cross2D(vectorToTarget, vectorToBottom);
+    return crossTopTarget * crossTargetBottom >= 0;
   }
 }

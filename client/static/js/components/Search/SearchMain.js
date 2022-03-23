@@ -1,7 +1,7 @@
 import { RecentSearchList } from "./RecentSearchList.js";
 import { AutoCompleteList } from "./AutoComplete.js";
 import { debounce } from "../../util.js";
-import { autoCompleteDelay } from "../../constant.js";
+import { autoCompleteDelay, AUTO_COMPLETE, RECENT_SEARCH } from "../../constant.js";
 
 export class SearchMain {
   #searchMainDOM;
@@ -9,6 +9,7 @@ export class SearchMain {
   #recentSearchDOM;
   #recentSearch;
   #autoComplete;
+  #currentDropdown;
 
   constructor() {
     this.#recentSearch = new RecentSearchList();
@@ -25,7 +26,6 @@ export class SearchMain {
         ${this.#getInputboxTemplate()} 
         ${this.#autoComplete.template}
         ${this.#recentSearch.template}
-        
       </div>
     `;
   }
@@ -47,7 +47,7 @@ export class SearchMain {
     this.#addSearchMainFocusEvent();
     this.#addSubmitEvent();
     this.#addRecentSearchClickEvent();
-    this.#addTypingEvent();
+    this.#addKeyDownEvent();
   }
 
   #cacheDOM() {
@@ -58,7 +58,7 @@ export class SearchMain {
 
   #addSearchMainFocusEvent() {
     this.#searchMainDOM.addEventListener("focusin", () => {
-      this.#openOneDropdown("recent");
+      this.#openOneDropdown(RECENT_SEARCH);
     });
   }
 
@@ -70,6 +70,7 @@ export class SearchMain {
   #handleSubmitEvent(event) {
     event.preventDefault();
     const newSearchData = this.#searchInputDOM.value;
+    if (!newSearchData) return;
     this.#recentSearch.handleNewRecentSearchData(newSearchData);
     this.#searchInputDOM.value = "";
   }
@@ -77,36 +78,44 @@ export class SearchMain {
   #addRecentSearchClickEvent() {
     this.#recentSearchDOM.addEventListener("click", (e) => {
       this.#recentSearch.close();
-      this.#searchInputDOM.value = this.#recentSearch.getClickedText(e);
+      this.#searchInputDOM.value = this.#recentSearch.getClickedItemText(e);
     });
   }
 
-  #addTypingEvent() {
-    this.#searchInputDOM.addEventListener(
-      "input",
+  #addKeyDownEvent() {
+    this.#searchInputDOM.addEventListener("keydown", (e) => this.#handleKeyDownEvent(e));
+  }
+
+  #handleKeyDownEvent(event) {
+    if (["ArrowUp", "ArrowDown"].includes(event.key)) {
+      this.#currentDropdown.handleArrowKeyDown(event.key);
+      this.#searchInputDOM.value = this.#currentDropdown.keyboardFocusedItem.innerText;
+    } else {
       debounce(() => {
         this.#handleTypingEvent();
-      }, autoCompleteDelay)
-    );
+      }, autoCompleteDelay)();
+    }
   }
 
   #handleTypingEvent() {
     const typedKeyword = this.#searchInputDOM.value;
     if (typedKeyword === "") {
-      this.#openOneDropdown("recent");
+      this.#openOneDropdown(RECENT_SEARCH);
     } else {
-      this.#openOneDropdown("autoComplete");
+      this.#openOneDropdown(AUTO_COMPLETE);
       this.#autoComplete.updateAutoCompleteList(typedKeyword);
     }
   }
 
   #openOneDropdown(subject) {
-    if (subject === "recent") {
+    if (subject === RECENT_SEARCH) {
       this.#recentSearch.open();
       this.#autoComplete.close();
-    } else if (subject === "autoComplete") {
+      this.#currentDropdown = this.#recentSearch;
+    } else if (subject === AUTO_COMPLETE) {
       this.#recentSearch.close();
       this.#autoComplete.open();
+      this.#currentDropdown = this.#autoComplete;
     }
   }
 }

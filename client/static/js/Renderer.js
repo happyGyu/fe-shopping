@@ -1,6 +1,7 @@
 import { Carousel } from "./components/Carousel.js";
 import { SearchCategory } from "./components/search/SearchCategory.js";
 import { SearchMain } from "./components/Search/SearchMain.js";
+import { CategoryController } from "./components/Category/Controller.js";
 
 export function Renderer() {}
 
@@ -20,4 +21,9 @@ Renderer.prototype.addSearchMain = function () {
   const searchMain = new SearchMain();
   document.querySelector(".search").insertAdjacentHTML("beforeend", searchMain.template);
   searchMain.activate();
+};
+
+Renderer.prototype.addCategory = function () {
+  const categoryController = new CategoryController();
+  categoryController.activate();
 };

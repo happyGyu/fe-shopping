@@ -1,10 +1,10 @@
 @import 'base/reset';
 @import 'base/variable';
 @import 'base/layout';
-
-@import 'mixin';
+@import 'base/mixin';
 
 @import 'components/header/header';
-@import 'components/carousel';
 @import 'components/header/search';
+@import 'components/header/category';
+@import 'components/carousel';
 @import 'components/dropDownList';

@@ -1,0 +1,61 @@
+.category {
+    margin-right: 30px;
+    position: relative;
+
+    &__btn {
+        background: url($iconURL) no-repeat;
+        width: 110px;
+        height: 115px;
+        position: relative;
+    }
+
+    &__text {
+        color: $white;
+        position: absolute;
+        top: 75px;
+        width: 100%;
+        text-align: center;
+    }
+
+    ul {
+        border-top: 1px solid $gray;
+    }
+
+    &__layer {
+        display: flex;
+        position: absolute;
+        top: 100%;
+        z-index: 1000;
+        background-color: $white;
+
+        &-main {
+            width: 170px;
+            font-size: 0.875rem;
+    
+            li {
+                @include verticalCenter;
+                height: 30px;
+                width: 100%;
+            }
+            li:hover {
+                color: $blue;
+                text-decoration: underline;
+            }
+
+            .selected {
+                color: $blue;
+                font-weight: 800;
+            }
+
+        }
+
+        &-extended {
+            width: 170px;
+
+            li {
+                @include verticalCenter;
+                height: 20px;
+            }
+        }
+    }
+}

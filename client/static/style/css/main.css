@@ -468,6 +468,11 @@ header {
   text-decoration: underline;
 }
 
+.category__layer-main .selected {
+  color: #4285f4;
+  font-weight: 800;
+}
+
 .category__layer-extended {
   width: 170px;
 }
@@ -479,7 +484,7 @@ header {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  height: 30px;
+  height: 20px;
 }
 
 .carousel {

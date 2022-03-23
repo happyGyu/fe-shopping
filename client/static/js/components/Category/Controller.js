@@ -4,6 +4,8 @@ import { cross2D } from "../../util.js";
 import { smartLayerDelay } from "../../constant.js";
 
 export class CategoryController {
+  #model;
+  #view;
   #smartLayer = {
     timeoutID: null,
     selectedItem: null,
@@ -13,12 +15,12 @@ export class CategoryController {
   };
 
   constructor() {
-    this.model = new CategoryModel();
-    this.view = new CategoryView();
+    this.#model = new CategoryModel();
+    this.#view = new CategoryView();
   }
 
   activate() {
-    this.model.activate();
+    this.#model.activate();
     this.#cacheDOM();
     this.#addMouseEvents();
   }
@@ -43,8 +45,8 @@ export class CategoryController {
   }
 
   #renderMainLayer() {
-    const mainLayerData = this.model.itemNameStore;
-    const mainLayerTemplate = this.view.getMainLayerTemplate(mainLayerData);
+    const mainLayerData = this.#model.itemNameStore;
+    const mainLayerTemplate = this.#view.getMainLayerTemplate(mainLayerData);
     this.categoryMainLayerDOM.innerHTML = mainLayerTemplate;
   }
 
@@ -68,13 +70,13 @@ export class CategoryController {
 
     if (this.#isInLayerTriangle(currCoord)) {
       this.#smartLayer.timeoutID = setTimeout(() => {
-        this.renderExtendedLayer(currItem);
+        this.#renderExtendedLayer(currItem);
       }, smartLayerDelay);
     } else {
-      this.renderExtendedLayer(currItem);
+      this.#renderExtendedLayer(currItem);
     }
-    this.#smartLayer.refMouseCoord = currCoord;
     this.#smartLayer.selectedItem = currItem;
+    this.#smartLayer.refMouseCoord = currCoord;
   }
 
   #isValidItem(currItem) {
@@ -100,10 +102,10 @@ export class CategoryController {
     return topTargetCross * targetBottomCross >= 0;
   }
 
-  renderExtendedLayer(parentItem) {
+  #renderExtendedLayer(parentItem) {
     const targetName = parentItem.dataset.name;
-    const extendedLayerData = this.model.depthStore[targetName];
-    const extendedLayerTemplate = this.view.getExtendedLayerTemplate(extendedLayerData);
+    const extendedLayerData = this.#model.depthStore[targetName];
+    const extendedLayerTemplate = this.#view.getExtendedLayerTemplate(extendedLayerData);
     this.categoryExtendedLayerDOM.innerHTML = extendedLayerTemplate;
     this.#updateSmartLayerCoordinate();
   }

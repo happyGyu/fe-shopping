@@ -42,6 +42,11 @@
                 text-decoration: underline;
             }
 
+            .selected {
+                color: $blue;
+                font-weight: 800;
+            }
+
         }
 
         &-extended {
@@ -49,7 +54,7 @@
 
             li {
                 @include verticalCenter;
-                height: 30px;
+                height: 20px;
             }
         }
     }

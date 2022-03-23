@@ -1,5 +1,5 @@
 import { Carousel } from "./components/carousel.js";
-import { SearchCategory } from "./components/search/searchCategory.js";
+import { SearchCategory } from "./components/Search/SearchCategory.js";
 import { SearchMain } from "./components/Search/SearchMain.js";
 import { CategoryController } from "./components/Category/Controller.js";
 

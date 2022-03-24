@@ -6,11 +6,7 @@ export class CategoryViewModel {
     constructor() {
         this.setModel();
         this.observer = new Observer();
-        this.viewState = {
-            layerDepth: null,
-            mainLayerData: null,
-            subLayerData: null,
-        };
+        this.viewState = { layerDepth: null, layerData: null };
     }
 
     async setModel() {
@@ -18,15 +14,9 @@ export class CategoryViewModel {
         this.model = new CategoryModel(categoryData);
     }
 
-    updateMainLayerState() {
-        this.viewState.layerDepth = "main";
-        this.viewState.mainLayerData = this.getMainLayerData();
-        this.observer.notify(this.viewState);
-    }
-
-    updateSubLayerState(parentMenuName) {
-        this.viewState.layerDepth = "sub";
-        this.viewState.subLayerData = this.getSubLayerData(parentMenuName);
+    updateLayerState(depth, parent = null) {
+        this.viewState.layerDepth = depth;
+        this.viewState.layerData = parent ? this.getSubLayerData(parent) : this.getMainLayerData();
         this.observer.notify(this.viewState);
     }
 

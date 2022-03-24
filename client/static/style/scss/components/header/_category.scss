@@ -31,6 +31,9 @@
         &-main {
             width: 170px;
             font-size: 0.875rem;
+            border-right: 1px solid $gray;
+            border-left: 1px solid $gray;
+            border-bottom: 1px solid $gray;
     
             li {
                 @include verticalCenter;
@@ -47,6 +50,11 @@
                 font-weight: 800;
             }
 
+            .menu-icon {
+                width: 20px;
+                height: 20px;
+                margin: 0px 10px;
+            }
         }
 
         &-extended {

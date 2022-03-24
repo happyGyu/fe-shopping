@@ -450,6 +450,9 @@ header {
 .category__layer-main {
   width: 170px;
   font-size: 0.875rem;
+  border-right: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
 }
 
 .category__layer-main li {
@@ -471,6 +474,12 @@ header {
 .category__layer-main .selected {
   color: #4285f4;
   font-weight: 800;
+}
+
+.category__layer-main .menu-icon {
+  width: 20px;
+  height: 20px;
+  margin: 0px 10px;
 }
 
 .category__layer-extended {

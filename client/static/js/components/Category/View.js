@@ -1,13 +1,32 @@
-import { CategoryController } from "./Controller.js";
+import { CategoryViewModel } from "./viewModel.js";
 
 export class CategoryView {
     constructor() {
-        this.controller = new CategoryController();
+        this.setViewModel();
+    }
+
+    setViewModel() {
+        this.viewModel = new CategoryViewModel();
+        this.viewModel.observer.subscribe(this);
+    }
+
+    detectChangedState(viewState) {
+        switch (viewState.layerDepth) {
+            case "main":
+                this.renderMainLayer(viewState.mainLayerData);
+                break;
+            case "sub":
+                this.renderSubLayer(viewState.subLayerData);
+                break;
+            default:
+                console.log("This change has nothing to do with me.");
+        }
     }
 
     activate() {
         this.cacheDOM();
-        this.activateCategoryBtn();
+        this.activateBtn();
+        //this.activateLayer();
     }
 
     cacheDOM() {
@@ -18,12 +37,11 @@ export class CategoryView {
         this.categoryExtendedLayerDOM = document.querySelector(".category__layer-extended");
     }
 
-    activateCategoryBtn() {
-        this.categoryBtnDOM.addEventListener("mouseenter", () => this.renderMainLayer());
+    activateBtn() {
+        this.categoryBtnDOM.addEventListener("mouseenter", () => this.viewModel.handleBtnMouseEnterEvent());
     }
 
-    renderMainLayer() {
-        const mainLayerData = this.controller.getMainLayerData();
+    renderMainLayer(mainLayerData) {
         const mainLayerTemplate = this.getMainLayerTemplate(mainLayerData);
         this.categoryMainLayerDOM.innerHTML = mainLayerTemplate;
     }
@@ -47,7 +65,24 @@ export class CategoryView {
       `;
     }
 
+    activateLayer() {
+        this.categoryLayerDOM.addEventListener("mousemove", (e) =>
+            this.viewModel.handleLayerMouseMoveEvent(e)
+        );
+    }
+
+    renderExtendedLayer() {}
+
     getExtendedLayerTemplate(extendedLayerItems) {
         return extendedLayerItems.map((item) => this.getSubCategoryItemTemplate(item)).join("");
+    }
+
+    getSubCategoryItemTemplate(item) {
+        return `
+          <li data-name=${item}>
+            ${item}
+            <i class= "select-icon"></i>
+          </li>
+        `;
     }
 }

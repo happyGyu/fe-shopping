@@ -498,6 +498,8 @@ header {
   border-bottom: 1px solid #ddd;
   width: 600px;
   position: relative;
+  background-repeat: no-repeat;
+  background-position: bottom 2px right 2px;
 }
 
 .category__layer-extended li {
@@ -511,12 +513,6 @@ header {
   height: 30px;
   width: 170px;
   padding-left: 10px;
-}
-
-.category__layer-extended .menu-banner {
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
 }
 
 .carousel {

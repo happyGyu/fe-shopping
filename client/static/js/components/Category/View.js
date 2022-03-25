@@ -60,6 +60,7 @@ export class CategoryView {
     #renderSubLayer(subLayerData, selectedMenu) {
         const subLayerTemplate = this.#getSubLayerTemplate(subLayerData);
         this.#subLayerDOM.innerHTML = subLayerTemplate;
+        this.#setSubLayerBannerImg(subLayerData.bannerImg);
         this.#toggleSelectedMenu(selectedMenu);
     }
 
@@ -68,7 +69,6 @@ export class CategoryView {
         <ul class="category__layer-main--${subLayerData.parentMenuName}">
           ${subLayerData.subMenus.map((subMenu) => this.#getSubMenuTemplate(subMenu)).join("")}
         </ul>
-        ${this.#getSubLayerBannerTemplate(subLayerData.bannerImg)}
       `;
     }
 
@@ -80,8 +80,8 @@ export class CategoryView {
         `;
     }
 
-    #getSubLayerBannerTemplate(bannerImgSrc) {
-        return `<img class="menu-banner" src="${bannerImgSrc}"/>`
+    #setSubLayerBannerImg(bannerImgSrc) {
+        this.#subLayerDOM.style.backgroundImage = `url(${bannerImgSrc})`;
     }
 
     #toggleSelectedMenu(newSelectedName) {

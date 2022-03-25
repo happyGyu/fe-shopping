@@ -74,6 +74,8 @@
             border-bottom: 1px solid $gray;
             width: 600px;
             position: relative;
+            background-repeat: no-repeat;
+            background-position: bottom 2px right 2px;
 
             li {
                 @include verticalCenter;
@@ -81,14 +83,6 @@
                 height: 30px;
                 width: 170px;
                 padding-left: 10px;
-            }
-            
-            .menu-banner {
-                position: absolute;
-                bottom: 0px;
-                right:0px;
-                // width: 500px;
-                // height: 413px;
             }
         }
     }

@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
-import categoryData from "./data/category.json" assert { type: "json" };
-import carouselData from "./data/carousel.json" assert { type: "json" };
+import categoryData from "./data/category.json";
+import carouselData from "./data/carousel.json";
 import { searchRouter } from "./routers/searchRouter.js";
 
 const app = express();

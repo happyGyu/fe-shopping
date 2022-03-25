@@ -1,47 +1,42 @@
-import { getData } from "../../util.js";
-
 export class CategoryModel {
-  #categoryData;
-  #itemNameStore;
-  #bannerImgSrcStore;
-  #depthStore;
+    #categoryData;
+    #menuNameStore;
+    #bannerImgSrcStore;
+    #subMenuStore;
+    #iconSrcStore;
 
-  constructor() {
-    this.#categoryData;
-    this.#itemNameStore = new Map();
-    this.#bannerImgSrcStore = {};
-    this.#depthStore = {};
-  }
-
-  async activate() {
-    this.#categoryData = await getData("category");
-    this.#parseCategoryData();
-  }
-
-  get itemNameStore() {
-    return this.#itemNameStore;
-  }
-
-  get bannerImgStore() {
-    return this.#bannerImgSrcStore;
-  }
-
-  get depthStore() {
-    return this.#depthStore;
-  }
-
-  #parseCategoryData() {
-    for (let subCategoryData of this.#categoryData) {
-      const subCategoryName = subCategoryData.name;
-      const items = subCategoryData.items;
-      const itemNames = [];
-      for (let item of items) {
-        const itemName = item.name;
-        itemNames.push(itemName);
-        this.#bannerImgSrcStore[itemName] = item.bannerImgSrc;
-        this.#depthStore[itemName] = item.depth;
-      }
-      this.#itemNameStore.set(subCategoryName, itemNames);
+    constructor(categoryData) {
+        this.#categoryData = categoryData;
+        this.#menuNameStore = [];
+        this.#subMenuStore = {};
+        this.#iconSrcStore = {};
+        this.#bannerImgSrcStore = {};
+        this.#parseCategoryData();
     }
-  }
+
+    #parseCategoryData() {
+        for (const menuData of this.#categoryData) {
+            const menuName = menuData.name;
+            this.#menuNameStore.push(menuName);
+            this.#subMenuStore[menuName] = menuData.subMenus;
+            this.#iconSrcStore[menuName] = menuData.iconSrc;
+            this.#bannerImgSrcStore[menuName] = menuData.bannerImgSrc;
+        }
+    }
+
+    get menuNameStore() {
+        return this.#menuNameStore;
+    }
+
+    get bannerImgStore() {
+        return this.#bannerImgSrcStore;
+    }
+
+    get subMenuStore() {
+        return this.#subMenuStore;
+    }
+
+    get iconSrcStore() {
+        return this.#iconSrcStore;
+    }
 }

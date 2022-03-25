@@ -1,5 +1,5 @@
 import express from "express";
-import searchCategory from "../data/searchCategory.json" assert { type: "json" };
+import searchCategory from "../data/searchCategory.json";
 export const searchRouter = express.Router();
 
 searchRouter.get("/category", (req, res) => {

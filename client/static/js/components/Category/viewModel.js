@@ -8,7 +8,7 @@ export class CategoryViewModel {
 
     constructor() {
         this.#setModel();
-        this.#viewState = { layerDepth: null, layerData: null };
+        this.#viewState = { layerDepth: null, layerData: null, selectedMenu: null };
         this.observer = new Observer();
     }
 
@@ -28,6 +28,7 @@ export class CategoryViewModel {
     #updateLayerState(depth, parent = null) {
         this.#viewState.layerDepth = depth;
         this.#viewState.layerData = parent ? this.#getSubLayerData(parent) : this.#getMainLayerData();
+        this.#viewState.selectedMenu = parent;
         this.observer.notify(this.#viewState);
     }
 

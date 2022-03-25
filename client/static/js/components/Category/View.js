@@ -25,7 +25,7 @@ export class CategoryView {
                 this.#renderMainLayer(viewState.layerData);
                 break;
             case "sub":
-                this.#renderSubLayer(viewState.layerData);
+                this.#renderSubLayer(viewState.layerData, viewState.selectedMenu);
                 break;
             default:
                 console.log("This change has nothing to do with me.");
@@ -51,14 +51,16 @@ export class CategoryView {
         return `
         <li data-name=${itemData.name}>
           <img class="menu-icon" src=${itemData.icon} />  
-          ${itemData.name}
+          <span class="menu-name">${itemData.name}</span>
+          <img class="icon" />
         </li>
       `;
     }
 
-    #renderSubLayer(subLayerData) {
+    #renderSubLayer(subLayerData, selectedMenu) {
         const subLayerTemplate = this.#getSubLayerTemplate(subLayerData);
         this.#subLayerDOM.innerHTML = subLayerTemplate;
+        this.#toggleSelectedMenu(selectedMenu);
     }
 
     #getSubLayerTemplate(subLayerData) {
@@ -66,6 +68,7 @@ export class CategoryView {
         <ul class="category__layer-main--${subLayerData.parentMenuName}">
           ${subLayerData.subMenus.map((subMenu) => this.#getSubMenuTemplate(subMenu)).join("")}
         </ul>
+        ${this.#getSubLayerBannerTemplate(subLayerData.bannerImg)}
       `;
     }
 
@@ -73,9 +76,19 @@ export class CategoryView {
         return `
           <li data-name=${item}>
             ${item}
-            <i class= "select-icon"></i>
           </li>
         `;
+    }
+
+    #getSubLayerBannerTemplate(bannerImgSrc) {
+        return `<img class="menu-banner" src="${bannerImgSrc}"/>`
+    }
+
+    #toggleSelectedMenu(newSelectedName) {
+        const prevSelected = this.#mainLayerDOM.querySelector('.selected');
+        const newSelected = this.#mainLayerDOM.querySelector(`[data-name='${newSelectedName}']`);
+        prevSelected?.classList.toggle('selected');
+        newSelected.classList.toggle('selected');
     }
 
     activate() {

@@ -19,6 +19,7 @@
 
     ul {
         border-top: 1px solid $gray;
+        padding: 10px 0px;
     }
 
     &__layer {
@@ -27,6 +28,12 @@
         top: 100%;
         z-index: 1000;
         background-color: $white;
+
+        li:hover {
+            color: $blue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
 
         &-main {
             width: 170px;
@@ -39,15 +46,20 @@
                 @include verticalCenter;
                 height: 30px;
                 width: 100%;
-            }
-            li:hover {
-                color: $blue;
-                text-decoration: underline;
+                position: relative;
             }
 
             .selected {
                 color: $blue;
                 font-weight: 800;
+
+                .icon {
+                    content: url("https://static-page.kakao.com/static/common/ic-more-gray.svg?639494b81c8127013d0e627243aee94e");
+                    color: $blue;
+                    margin-right: 10px;
+                    position: absolute;
+                    right: 3px;
+                }
             }
 
             .menu-icon {
@@ -58,11 +70,25 @@
         }
 
         &-extended {
-            width: 170px;
+            border-right: 1px solid $gray;
+            border-bottom: 1px solid $gray;
+            width: 600px;
+            position: relative;
 
             li {
                 @include verticalCenter;
-                height: 20px;
+                font-size: 0.875rem;
+                height: 30px;
+                width: 170px;
+                padding-left: 10px;
+            }
+            
+            .menu-banner {
+                position: absolute;
+                bottom: 0px;
+                right:0px;
+                // width: 500px;
+                // height: 413px;
             }
         }
     }

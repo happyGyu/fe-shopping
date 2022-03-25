@@ -21,6 +21,10 @@ export class CategoryViewModel {
         this.#updateLayerState("main", parent);
     }
 
+    handleCategoryMouseLeaveEvent(parent = null) {
+        this.#updateLayerState("none", parent);
+    }
+
     handleLayerMouseMoveEvent(parent = null) {
         this.#updateLayerState("sub", parent);
     }

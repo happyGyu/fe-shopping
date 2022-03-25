@@ -21,6 +21,9 @@ export class CategoryView {
 
     detectChangedState(viewState) {
         switch (viewState.layerDepth) {
+            case "none":
+                this.#clearLayer();
+                break;
             case "main":
                 this.#renderMainLayer(viewState.layerData);
                 break;
@@ -32,6 +35,11 @@ export class CategoryView {
         }
     }
 
+    #clearLayer() {
+        this.#mainLayerDOM.innerHTML = "";
+        this.#subLayerDOM.innerHTML = "";
+    }
+    
     #renderMainLayer(mainLayerData) {
         const mainLayerTemplate = this.#getMainLayerTemplate(mainLayerData);
         this.#mainLayerDOM.innerHTML = mainLayerTemplate;
@@ -85,10 +93,10 @@ export class CategoryView {
     }
 
     #toggleSelectedMenu(newSelectedName) {
-        const prevSelected = this.#mainLayerDOM.querySelector('.selected');
+        const prevSelected = this.#mainLayerDOM.querySelector(".selected");
         const newSelected = this.#mainLayerDOM.querySelector(`[data-name='${newSelectedName}']`);
-        prevSelected?.classList.toggle('selected');
-        newSelected.classList.toggle('selected');
+        prevSelected?.classList.toggle("selected");
+        newSelected.classList.toggle("selected");
     }
 
     activate() {
@@ -107,12 +115,9 @@ export class CategoryView {
         this.#categoryDOM.addEventListener("mouseenter", () =>
             this.#viewModel.handleCategoryMouseEnterEvent()
         );
-        this.#categoryDOM.addEventListener("mouseleave", () => this.#clearLayer());
-    }
-
-    #clearLayer() {
-        this.#mainLayerDOM.innerHTML = "";
-        this.#subLayerDOM.innerHTML = "";
+        this.#categoryDOM.addEventListener("mouseleave", () => 
+            this.#viewModel.handleCategoryMouseLeaveEvent()
+        );
     }
 
     #activateMainLayer() {

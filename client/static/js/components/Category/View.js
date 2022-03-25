@@ -3,45 +3,51 @@ import { smartLayerDelay } from "../../constant.js";
 import { Vector } from "../../common/Vector.js";
 
 export class CategoryView {
+    #viewModel;
+    #smartLayer;
+    #categoryDOM;
+    #mainLayerDOM;
+    #subLayerDOM;
+
     constructor() {
-        this.setViewModel();
-        this.smartLayer = { selectedItem: null, refMouseCoord: null, timeoutID: null };
+        this.#setViewModel();
+        this.#smartLayer = { selectedItem: null, refMouseCoord: null, timeoutID: null };
     }
 
-    setViewModel() {
-        this.viewModel = new CategoryViewModel();
-        this.viewModel.observer.subscribe(this);
+    #setViewModel() {
+        this.#viewModel = new CategoryViewModel();
+        this.#viewModel.observer.subscribe(this);
     }
 
     detectChangedState(viewState) {
         switch (viewState.layerDepth) {
             case "main":
-                this.renderMainLayer(viewState.layerData);
+                this.#renderMainLayer(viewState.layerData);
                 break;
             case "sub":
-                this.renderSubLayer(viewState.layerData);
+                this.#renderSubLayer(viewState.layerData);
                 break;
             default:
                 console.log("This change has nothing to do with me.");
         }
     }
 
-    renderMainLayer(mainLayerData) {
-        const mainLayerTemplate = this.getMainLayerTemplate(mainLayerData);
-        this.mainLayerDOM.innerHTML = mainLayerTemplate;
+    #renderMainLayer(mainLayerData) {
+        const mainLayerTemplate = this.#getMainLayerTemplate(mainLayerData);
+        this.#mainLayerDOM.innerHTML = mainLayerTemplate;
     }
 
-    getMainLayerTemplate(mainLayerData) {
+    #getMainLayerTemplate(mainLayerData) {
         return `
         <ul class="category__layer-main">
           ${mainLayerData
-              .map((mainLayerItemData) => this.getMainLayerItemTemplate(mainLayerItemData))
+              .map((mainLayerItemData) => this.#getMainLayerItemTemplate(mainLayerItemData))
               .join("")}
         </ul>
       `;
     }
 
-    getMainLayerItemTemplate(itemData) {
+    #getMainLayerItemTemplate(itemData) {
         return `
         <li data-name=${itemData.name}>
           <img class="menu-icon" src=${itemData.icon} />  
@@ -50,20 +56,20 @@ export class CategoryView {
       `;
     }
 
-    renderSubLayer(subLayerData) {
-        const subLayerTemplate = this.getSubLayerTemplate(subLayerData);
-        this.subLayerDOM.innerHTML = subLayerTemplate;
+    #renderSubLayer(subLayerData) {
+        const subLayerTemplate = this.#getSubLayerTemplate(subLayerData);
+        this.#subLayerDOM.innerHTML = subLayerTemplate;
     }
 
-    getSubLayerTemplate(subLayerData) {
+    #getSubLayerTemplate(subLayerData) {
         return `
         <ul class="category__layer-main--${subLayerData.parentMenuName}">
-          ${subLayerData.subMenus.map((subMenu) => this.getSubMenuTemplate(subMenu)).join("")}
+          ${subLayerData.subMenus.map((subMenu) => this.#getSubMenuTemplate(subMenu)).join("")}
         </ul>
       `;
     }
 
-    getSubMenuTemplate(item) {
+    #getSubMenuTemplate(item) {
         return `
           <li data-name=${item}>
             ${item}
@@ -73,61 +79,66 @@ export class CategoryView {
     }
 
     activate() {
-        this.cacheDOM();
-        this.activateCategory();
-        this.activateMainLayer();
+        this.#cacheDOM();
+        this.#activateCategory();
+        this.#activateMainLayer();
     }
 
-    cacheDOM() {
-        this.categoryDOM = document.querySelector(".category");
-        this.mainLayerDOM = document.querySelector(".category__layer-main");
-        this.subLayerDOM = document.querySelector(".category__layer-extended");
+    #cacheDOM() {
+        this.#categoryDOM = document.querySelector(".category");
+        this.#mainLayerDOM = document.querySelector(".category__layer-main");
+        this.#subLayerDOM = document.querySelector(".category__layer-extended");
     }
 
-    activateCategory() {
-        this.categoryDOM.addEventListener("mouseenter", () => this.viewModel.updateLayerState("main"));
-        this.categoryDOM.addEventListener("mouseleave", () => this.clearLayer());
+    #activateCategory() {
+        this.#categoryDOM.addEventListener("mouseenter", () =>
+            this.#viewModel.handleCategoryMouseEnterEvent()
+        );
+        this.#categoryDOM.addEventListener("mouseleave", () => this.#clearLayer());
     }
 
-    clearLayer() {
-        this.mainLayerDOM.innerHTML = "";
-        this.subLayerDOM.innerHTML = "";
+    #clearLayer() {
+        this.#mainLayerDOM.innerHTML = "";
+        this.#subLayerDOM.innerHTML = "";
     }
 
-    activateMainLayer() {
-        this.mainLayerDOM.addEventListener("mouseout", () => this.handleLayerMouseOutEvent());
-        this.mainLayerDOM.addEventListener("mousemove", (e) => this.handleLayerMouseMoveEvent(e));
+    #activateMainLayer() {
+        this.#mainLayerDOM.addEventListener("mouseout", () => this.#handleLayerMouseOutEvent());
+        this.#mainLayerDOM.addEventListener("mousemove", (e) =>
+            this.#delayMouseMoveEventSmartly(e, (parent) => this.#viewModel.handleLayerMouseMoveEvent(parent))
+        );
     }
 
-    handleLayerMouseOutEvent() {
-        clearTimeout(this.smartLayer.timeoutID);
-        this.smartLayer.timeoutID = null;
+    #handleLayerMouseOutEvent() {
+        clearTimeout(this.#smartLayer.timeoutID);
+        this.#smartLayer.timeoutID = null;
     }
 
-    handleLayerMouseMoveEvent(event) {
-        const currItem = event.target;
-        if (!this.isValidItem(currItem)) return;
+    #delayMouseMoveEventSmartly(event, handlerFunction) {
+        const currBelongedItem = event.target;
+        if (!this.#isValidItem(currBelongedItem)) return;
 
-        const currItemName = currItem.dataset.name;
+        const currBelongedItemName = currBelongedItem.dataset.name;
         const currCoord = [event.clientX, event.clientY];
-        const updateLayerDelay = this.isInLayerTriangle(currCoord) ? smartLayerDelay : 0;
+        const updateLayerDelay = this.#isInLayerTriangle(currCoord) ? smartLayerDelay : 0;
 
-        this.smartLayer.timeoutID = setTimeout(() => {
-            this.viewModel.updateLayerState("sub", currItemName);
+        this.#smartLayer.timeoutID = setTimeout(() => {
+            handlerFunction(currBelongedItemName);
         }, updateLayerDelay);
-        this.updateSmartLayer(currItem, currCoord);
+
+        this.#updateSmartLayer(currBelongedItem, currCoord);
     }
 
-    isValidItem(currItem) {
+    #isValidItem(currItem) {
         const isListItem = currItem.localName === "li";
-        const isChanged = currItem !== this.smartLayer.selectedItem;
+        const isChanged = currItem !== this.#smartLayer.selectedItem;
         return isListItem && isChanged;
     }
 
-    isInLayerTriangle(targetCoord) {
-        if (!this.smartLayer.refMouseCoord) return false;
-        const [triangleTopCoord, triangleBottomCoord] = this.getLayerTriangleCoordinate();
-        const referenceCoord = this.smartLayer.refMouseCoord;
+    #isInLayerTriangle(targetCoord) {
+        if (!this.#smartLayer.refMouseCoord) return false;
+        const [triangleTopCoord, triangleBottomCoord] = this.#getLayerTriangleCoordinate();
+        const referenceCoord = this.#smartLayer.refMouseCoord;
 
         const vectorToTop = new Vector(triangleTopCoord, referenceCoord);
         const vectorToBottom = new Vector(triangleBottomCoord, referenceCoord);
@@ -138,15 +149,15 @@ export class CategoryView {
         return topTargetCross * targetBottomCross >= 0;
     }
 
-    getLayerTriangleCoordinate() {
-        const mainLayerRect = this.mainLayerDOM.getBoundingClientRect();
+    #getLayerTriangleCoordinate() {
+        const mainLayerRect = this.#mainLayerDOM.getBoundingClientRect();
         const triangleTopCoord = [mainLayerRect.right, mainLayerRect.top];
         const triangleBottomCoord = [mainLayerRect.right, mainLayerRect.bottom];
         return [triangleTopCoord, triangleBottomCoord];
     }
 
-    updateSmartLayer(currItem, currCoord) {
-        this.smartLayer.selectedItem = currItem;
-        this.smartLayer.refMouseCoord = currCoord;
+    #updateSmartLayer(currItem, currCoord) {
+        this.#smartLayer.selectedItem = currItem;
+        this.#smartLayer.refMouseCoord = currCoord;
     }
 }

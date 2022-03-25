@@ -435,6 +435,7 @@ header {
 
 .category ul {
   border-top: 1px solid #ddd;
+  padding: 10px 0px;
 }
 
 .category__layer {
@@ -447,9 +448,18 @@ header {
   background-color: #FFF;
 }
 
+.category__layer li:hover {
+  color: #4285f4;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .category__layer-main {
   width: 170px;
   font-size: 0.875rem;
+  border-right: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
 }
 
 .category__layer-main li {
@@ -461,11 +471,7 @@ header {
           align-items: center;
   height: 30px;
   width: 100%;
-}
-
-.category__layer-main li:hover {
-  color: #4285f4;
-  text-decoration: underline;
+  position: relative;
 }
 
 .category__layer-main .selected {
@@ -473,8 +479,27 @@ header {
   font-weight: 800;
 }
 
+.category__layer-main .selected .icon {
+  content: url("https://static-page.kakao.com/static/common/ic-more-gray.svg?639494b81c8127013d0e627243aee94e");
+  color: #4285f4;
+  margin-right: 10px;
+  position: absolute;
+  right: 3px;
+}
+
+.category__layer-main .menu-icon {
+  width: 20px;
+  height: 20px;
+  margin: 0px 10px;
+}
+
 .category__layer-extended {
-  width: 170px;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  width: 600px;
+  position: relative;
+  background-repeat: no-repeat;
+  background-position: bottom 2px right 2px;
 }
 
 .category__layer-extended li {
@@ -484,7 +509,10 @@ header {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  font-size: 0.875rem;
   height: 30px;
+  width: 170px;
+  padding-left: 10px;
 }
 
 .carousel {

@@ -1,0 +1,25 @@
+.dropdown-list {
+    background-color: $white;
+    z-index: 1000;
+
+    &__item {
+        height:30px;
+        padding-left: 10px;
+
+        a {
+            @include verticalCenter;
+            height: 100%;
+        }
+
+        &:hover {
+            color: $blue;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    }
+
+    .keyboard-focusing {
+        color: $blue;
+        text-decoration: underline;
+    }
+}

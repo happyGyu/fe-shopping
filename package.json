@@ -1,0 +1,24 @@
+{
+  "name": "fe-shopping",
+  "version": "1.0.0",
+  "description": "coupang clone coding",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon --experimental-json-modules ./server/app.js",
+    "start": "node --experimental-json-modules ./server/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/happyGyu/fe-shopping.git"
+  },
+  "author": "Alan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/happyGyu/fe-shopping/issues"
+  },
+  "homepage": "https://github.com/happyGyu/fe-shopping#readme",
+  "dependencies": {
+    "express": "^4.17.3"
+  },
+  "type": "module"
+}
